@@ -2,6 +2,12 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+
+}
+
+body {
+  background: url("../img/car.jpg") no-repeat fixed top center;
+
 }
 
 .home {
@@ -451,7 +457,7 @@
     width: 100%;
     align-items: center;
     text-align: center;
-    background: url("../img/background.jpg") no-repeat fixed top center;
+    background: url("../img/car.jpg") no-repeat fixed top center;
     background-size: cover;
   }
 

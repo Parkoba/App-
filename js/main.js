@@ -39,14 +39,18 @@ window.addEventListener('resize', function () {
 });
 
 const form = document.querySelector('form');
+
 form.addEventListener('submit', (event) => {
     event.preventDefault();
+
     const email = form.querySelector('[name="email"]').value;
     const password = form.querySelector('[name="password"]').value;
-    const Number = form.querySelector('[name="Number"]').value;
+    const number = form.querySelector('[name="number"]').value;
     const text = form.querySelector('[name="text"]').value;
-    console.log(`Email: ${email} Password: ${password} Number: ${Number} Text: ${text}`);
+
+    console.log(`Email: ${email} Password: ${password} Number: ${number} Text: ${text}`);
 });
+
 
 
 // function onSignIn(googleUser) {

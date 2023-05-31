@@ -38,6 +38,7 @@ window.addEventListener('resize', function () {
     }
 });
 
+//console Signup Showcase 
 const form = document.querySelector('form');
 
 form.addEventListener('submit', (event) => {
@@ -50,7 +51,6 @@ form.addEventListener('submit', (event) => {
 
     console.log(`Email: ${email} Password: ${password} Number: ${number} Text: ${text}`);
 });
-
 
 
 // function onSignIn(googleUser) {

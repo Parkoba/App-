@@ -180,3 +180,9 @@ header {
     margin-bottom: -20px;
 
 }
+
+
+#map {
+    height: 700px;
+    width: 100%;
+}

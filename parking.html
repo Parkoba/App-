@@ -6,8 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="./img/Tobias_logo-removebg-preview 1.png" type="image/x-icon">
-    <link rel="stylesheet" href="css/main.css">
+    <!-- <link rel="stylesheet" href="css/main.css"> -->
     <link rel="stylesheet" href="fontawesome-free-5.15.2-web/css/all.css">
+    <link rel="stylesheet" href="css/map.css">
     <title>Parkoba</title>
 </head>
 
@@ -29,23 +30,28 @@
                     <a href="index.html" class="menu-nav__link">Home</a>
                 </li>
                 <li class="menu-nav__item">
-                    <a href="Sign-in.html.html" class="menu-nav__link">Sign in </a>
+                    <a href="Sign-in.html" class="menu-nav__link">Sign in </a>
                 </li>
                 <li class="menu-nav__item">
                     <a href="parking.html" class="menu-nav__link">Get Parking </a>
                 </li>
-                <!-- <li class="menu-nav__item">
-                    <a href="https://drive.google.com/file/d/1Mj0iocuBaSuFcVEw6yNepQRzur0dDFEX/view?usp=sharing" target="blank
-            " class="menu-nav__link"> My Resume</a>
-                </li> -->
                 <li class="menu-nav__item">
                     <a href="contact.html" class="menu-nav__link"> Contact Us</a>
                 </li>
             </ul>
         </nav>
     </header>
+    <Section class="Map section">
+        <div id="map" class="map-container" >
 
+       </div>
+    </Section>
+
+    <script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCItJKMjKi9B_yM07DwMcANsPaVsS4WBGU&callback=initMap">
+</script>
     <script src="js/main.js"></script>
+    <script src="js/map.js"></script>
 </body>
 
 </html>

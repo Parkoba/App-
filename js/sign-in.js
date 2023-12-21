@@ -51,12 +51,12 @@ function forgotPassword() {
     alert("forgotPassword");
 }
 
-function contactSupport() {
-    // Replace the alert with your logic for "Contact Support"
-    alert("contactSupport");
-}
+// function contactSupport() {
+//     // Replace the alert with your logic for "Contact Support"
+//     alert("contactSupport");
+// }
 
-function createAccount() {
-    // Replace the alert with your logic for "CREATE ACCOUNT"
-    alert("CREATE ACCOUNT");
-}
+// function createAccount() {
+//     // Replace the alert with your logic for "CREATE ACCOUNT"
+//     alert("CREATE ACCOUNT");
+// }

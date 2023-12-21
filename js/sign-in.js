@@ -48,15 +48,15 @@ $(window).on('resize', function () {
 // Placeholder functions for the onclick events
 function forgotPassword() {
     // Replace the alert with your logic for "Forgot Password?"
-    alert("");
+    alert("forgotPassword");
 }
 
 function contactSupport() {
     // Replace the alert with your logic for "Contact Support"
-    alert("Implement Contact Support functionality here.");
+    alert("contactSupport");
 }
 
 function createAccount() {
     // Replace the alert with your logic for "CREATE ACCOUNT"
-    alert("Implement CREATE ACCOUNT functionality here.");
+    alert("CREATE ACCOUNT");
 }

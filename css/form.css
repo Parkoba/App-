@@ -376,7 +376,7 @@ p.field span.i {
 Transitions
 ---------------------*/
 
-.box-form,
+/* .box-form,
 .box-info,
 .b,
 .b-support,
@@ -389,7 +389,38 @@ p.field span.i {
     -ms-transition: all 0.3s;
     -o-transition: all 0.3s;
     transition: all 0.3s;
+} */
+.box-form,
+.box-info,
+.b,
+.b-support,
+.b-cta,
+input[type=submit],
+p.field span.i {
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -ms-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
 }
+
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+
+    /* Add styles for screens with a maximum width of 768px */
+    .box-form,
+    .box-info,
+    .b,
+    .b-support,
+    .b-cta,
+    input[type=submit],
+    p.field span.i {
+        Width: 100%;
+        max-width: 100%;
+    }
+}
+
+/* Add more media queries for other screen sizes if needed */
 
 /*--------------------
 Credits

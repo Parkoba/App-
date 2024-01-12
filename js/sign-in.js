@@ -42,7 +42,7 @@ function closeLoginInfo() {
 }
 
 $(window).on('resize', function () {
-    closeLoginInfo();
+    closeLoginInfo(); 
 });
 
 // Placeholder functions for the onclick events
@@ -60,3 +60,7 @@ function forgotPassword() {
 //     // Replace the alert with your logic for "CREATE ACCOUNT"
 //     alert("CREATE ACCOUNT");
 // }
+
+function closeLoginInfo() {
+    $ ('.b-form').css("opacity", "1");
+}

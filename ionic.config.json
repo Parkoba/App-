@@ -1,0 +1,8 @@
+{
+  "name": "Parkoba",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite",
+  "id": "6f270ac9"
+}

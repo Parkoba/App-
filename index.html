@@ -1,57 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Ionic App</title>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="./img/Tobias_logo-removebg-preview 1.png" type="image/x-icon">
-    <!-- <link rel="stylesheet" href="css/main.css"> -->
-    <link rel="stylesheet" href="fontawesome-free-5.15.2-web/css/all.css">
-    <link rel="stylesheet" href="css/map.css">
-    <title>Parkoba</title>
-</head>
+    <base href="/" />
 
-<body>
+    <meta name="color-scheme" content="light dark" />
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
 
-    <header>
-        <div class="menu-btn">
-            <span class="menu-btn__burger">
-            </span>
-        </div>
-        <nav class="nav">
-            <ul class=" menu-nav">
-                <a href="#">
-                    <li class="menu-nav__item" active>
-                        <img src="./img/Tobias_logo-removebg-preview 1.png" class="logo" alt="logo">
-                    </li>
-                </a>
-                <li class="menu-nav__item" active>
-                    <a href="index.html" class="menu-nav__link">Home</a>
-                </li>
-                <li class="menu-nav__item">
-                    <a href="Sign-in.html" class="menu-nav__link">Sign in </a>
-                </li>
-                <li class="menu-nav__item">
-                    <a href="parking.html" class="menu-nav__link">Get Parking </a>
-                </li>
-                <li class="menu-nav__item">
-                    <a href="contact.html" class="menu-nav__link"> Contact Us</a>
-                </li>
-            </ul>
-        </nav>
-    </header>
-    <Section class="Map section">
-        <div id="map" class="map-container">
+    <link rel="shortcut icon" type="image/png" href="/parkoba_logo.png" />
 
-        </div>
-    </Section>
+    <!-- add to home screen for ios -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Ionic App" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  </head>
 
-    <script async
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCItJKMjKi9B_yM07DwMcANsPaVsS4WBGU&callback=initMap">
-    </script>
-    <script src="js/main.js"></script>
-    <script src="js/map.js"></script>
-</body>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
 
 </html>
+

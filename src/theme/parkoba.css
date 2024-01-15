@@ -1,0 +1,21 @@
+:root {
+    /** parkoba base **/
+    --parkoba-shadow: 2px 4px 10px 0px #635e5e;
+    --parkoba-base-color: #AC3970;
+    --parkoba-text-color: #000000;
+    --parkoba-background-color: #FEFDFD;
+ 
+}
+@media (prefers-color-scheme: dark) {
+    /*
+     * Dark Colors
+     * -------------------------------------------
+     */
+  
+    body {
+     --parkoba-shadow: 2px 4px 10px 0px #858080;
+     --parkoba-text-color: #ffffff;
+     --parkoba-base-color: #AC3970;
+     --parkoba-background-color: #000000;
+    }
+  }

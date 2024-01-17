@@ -1,19 +1,19 @@
 <script setup lang="ts">
+import { IonPage } from '@ionic/vue';
 import SignUpForm from '@/components/SignUpForm.vue';
 </script>
         
 <template>
-    <div class="form-container">
-        <SignUpForm />
-    </div>
+    <IonPage>
+        <div class="form-container">
+            <SignUpForm />
+        </div>
+    </IonPage>
 </template>
 
 
 <style scoped>
 .form-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    height: 100%;
 }
 </style>

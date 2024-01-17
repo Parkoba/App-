@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
-import App from './App.vue'
+import App from './App.vue';
+import PrimeVue from 'primevue/config';
 import router from './router';
 
 import { IonicVue } from '@ionic/vue';
@@ -24,8 +25,13 @@ import '../public/styles/main.css';
 /* Theme variables */
 import './theme/parkoba.css';
 
+/* Tailwind CSS */
+import '@/style.css';
+
+import 'primevue/resources/themes/lara-light-green/theme.css'
+
 const app = createApp(App)
-  .use(IonicVue)
+  .use(IonicVue).use(PrimeVue)
   .use(router);
   
 router.isReady().then(() => {

@@ -16,7 +16,7 @@ const isSlideEnd = toRef(swiperEl.value, 'isEnd');
 <template>
     <div class="proceed-plane">
         <Transition name="intro-button" mode="out-in">
-            <button v-if="isSlideEnd" @click="router.navigate('/tabs/tab1', 'forward', 'push')">Get Started</button>
+            <button v-if="isSlideEnd" @click="router.navigate('/register', 'forward', 'push')">Get Started</button>
             <button v-else @click="swiperEl.slideNext();">
                 Next
             </button>

@@ -3,30 +3,71 @@
 </script>
 
 <template>
-    <img src="/earth.jpg" alt="Earth" />
+    <img src="/earth.jpg" class="earth" alt="Earth" />
     <img src="/pin.jpg" class="pin" alt="Location Pin" />
 </template>
 
 <style scoped>
-.pin{
-    width: 70px;
-    top: -10px;
-    left: 0;
-    transform: rotateZ(-40deg);
-    transform-box: fill-box;
-    transform-origin: 200px;
-    animation: go-round 5s;
+.pin {
+    width: 50px;
+    top: 40%;
+    left: 40%;
+    /* rotate: -40deg; */
+    /* left: 0; */
+    /* transform: ; */
+    /* transform-box: fill-box; */
+    /* transform-origin: center center; */
+    animation: go-round 50s infinite;
+    /* transform: rotate(0deg) translateX(100px) rotate(405deg); */
 }
-img{
+.earth {
+    animation: rotate-earth 50s infinite;
+}
+img {
     position: absolute;
     max-width: 200px;
 }
-@keyframes go-round {
-    0%{
-        transform: rotateZ(-40deg);
+
+@keyframes rotate-earth {
+    from {
+        transform: rotate(0deg);
     }
-    100%{
-        transform: rotateZ(-400deg);
+    to {
+        transform: rotate(360deg);
     }
 }
-</style>
+/* @keyframes go-round {
+    from {
+        transform: rotate(0deg) translateX(100px) rotate(45deg);
+    }
+
+    to {
+        transform: rotate(360deg) translateX(100px) rotate(405deg);
+    }
+} */
+
+@keyframes go-round {
+    0% {
+        transform: rotate(0deg) translateX(100px) rotate(45deg);
+    }
+    25% {
+        transform: rotate(90deg) translateX(100px) rotate(90deg);
+    }
+    50% {
+        transform: rotate(180deg) translateX(100px) rotate(405deg);
+    }
+    75% {
+        transform: rotate(270deg) translateX(100px) rotate(90deg);
+    }
+    100% {
+        transform: rotate(360deg) translateX(100px) rotate(45deg);
+    }
+}
+/* @keyframes go-round {
+    0% {
+      transform: translateX(100px) rotate(0deg);
+    }
+    100% {
+      transform: translateX(100px) rotate(360deg);
+    }
+  } */</style>

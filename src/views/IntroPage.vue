@@ -67,8 +67,8 @@ import { } from '@ionic/vue'
                     <SwiperSlide>
                     <div class="slide_content">
                         <div class="graphics">
-                            <!-- <img src="/Earth_Location.png" class="rotate" alt="Picture of the Earth showing how close you are to the parking spot" /> -->
-                            <EarthSlide />
+                            <img src="/Earth_Location.png" class="rotate" alt="Picture of the Earth showing how close you are to the parking spot" />
+                            <!-- <EarthSlide /> -->
                         </div>
                         <strong class="heading">Find A Spot Close To You</strong>
                     </div>
@@ -143,7 +143,7 @@ import { } from '@ionic/vue'
     gap: 20px;
 }
 img.rotate{
-    animation: spin 5s linear infinite;
+    animation: spin 50s linear infinite;
 }
 :deep(.graphics) {
     position: relative;

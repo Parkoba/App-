@@ -28,6 +28,6 @@ img {
     transform: translateY(-200px);
     opacity: 0;
     right: -30px;
-    bottom: -30px;
+    bottom: 0px;
 }
 </style>

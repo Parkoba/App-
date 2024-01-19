@@ -43,7 +43,7 @@ import { } from '@ionic/vue'
     
 <template>
     <IonPage>
-        <div>
+        <div v-once>
             <Swiper effect="coverflow" :speed="800" @slide-change="(e) => activeIndex = e.realIndex">
                 <!-- <SwiperSlide v-for="(slide, i) in slides">
                     <SlideContent :alt="slide.alt" :index="i" :heading="slide.heading" :image="slide.image" />
@@ -89,7 +89,7 @@ import { } from '@ionic/vue'
                         <strong class="heading">Affordable & Accessible</strong>
                     </div>
                     </SwiperSlide>
-                <div class="pagination">
+                <div class="pagination flex justify-center items-center p-1.5 gap-3.5 mt-[50px]">
                     <span v-for="(_, i)  in 5" :key="i" class="bullet" @click="activeIndex = i"
                         :class="{ active: i === activeIndex }"></span>
                 </div>
@@ -104,21 +104,32 @@ import { } from '@ionic/vue'
 /* .parkoba-logo{
     margin-left: 20px;
 } */
-.swiper :global(.swiper-wrapper) {
+.slide_content {
+    display: flex;
+    height: fit-content; 
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: 30px 20px 0;
+    border-radius: 10px;
+    padding: 20px 20px;
+    gap: 20px;
+}
+@media (min-width: 500px) {
+    .swiper-slide {
+        display: flex;
+        justify-content: center;
+    }
+    .slide_content {
+        width: 450px;
+    }
+}
+.swiper :deep(.swiper-wrapper) {
     max-height: 400px;
 }
 
 .active {
     background-color: var(--parkoba-base-color) !important;
-}
-
-.pagination {
-    margin-top: 50px;
-    padding: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
 }
 
 .bullet {
@@ -131,17 +142,7 @@ import { } from '@ionic/vue'
     font-size: 1.4rem;
     color: var(--parkoba-text-color);
 }
-.slide_content {
-    display: flex;
-    height: fit-content; 
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    margin: 30px 20px 0;
-    border-radius: 10px;
-    padding: 20px 20px;
-    gap: 20px;
-}
+
 img.rotate{
     animation: spin 50s linear infinite;
 }

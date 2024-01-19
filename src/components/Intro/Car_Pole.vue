@@ -32,6 +32,8 @@ watch(slide, () => {
 
 svg {
     position: absolute;
+    width: 100%;
+    height: 100%;
     max-width: 350px;
 }
 .pole {

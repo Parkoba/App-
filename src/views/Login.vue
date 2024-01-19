@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import SignUpForm from '@/components/SignUpForm.vue';
+import LoginForm from '@/components/SignUpForm.vue';
 </script>
         
 <template>
-    <div class="form-container">
-        <SignUpForm />
+    <div class="form-container h-full">
+        <LoginForm />
     </div>
 </template>
 
 
 <style scoped>
 .form-container {
-    display: flex;
+    /* display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: center; */
 }
 </style>

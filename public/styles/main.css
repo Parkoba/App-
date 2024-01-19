@@ -17,12 +17,8 @@
     font-family: 'DM Sans' !important;
 }
 
-svg {
-    width: 100%;
-    height: 100%;
-}
-.p-menuitem-link{background-color: transparent;}
-.p-steps-current .p-steps-number{background: var(--parkoba-base-color);}
+/* .p-menuitem-link{background-color: transparent;}
+.p-steps-current .p-steps-number{background: var(--parkoba-base-color);} */
 #shadow {
     fill: #f7f1f1;
 }

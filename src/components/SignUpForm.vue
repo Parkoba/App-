@@ -1,37 +1,73 @@
 <script setup lang="ts">
-import Steps from 'primevue/steps';
-const items = [{}, {}, {}];
+import Button from 'primevue/button';
+import InputText from 'primevue/inputtext';
+import { ref, inject, Ref } from 'vue';
+import AuthDivider from '@/components/AuthDivider.vue';
+import Google from '@/components/Google.svg';
+import Facebook from '@/components/Facebook.svg';
+import { Icon } from '@iconify/vue';
+const isLogin = inject<Ref<boolean>>('isSignUp')
+function goToLogin(e: Event){
+   e.preventDefault();
+   isLogin? isLogin.value=false: '';
+}
+const isLoading = ref(false), 
+isPasswordVisible = ref(false);
+const password = ref(''),
+username=ref('')
 </script>
 
 <template>
     <div class="flex flex-col gap-6 items-center justify-center w-full h-full px-10">
-        <form class="form flex flex-col items-start justify-center gap-6 p-5 w-full" @submit.prevent="" action="/" method="post">
-            <h3>Register</h3>
-            <Steps class="w-full" :model="items" :readonly="false">
-              
-            </Steps>
-            <input class="w-full px-2 py-3" type="text" name="username" placeholder="Username" />
-            <input class="w-full px-2 py-3" type="email" name="email" placeholder="Email Address" />
-            <input class="w-full px-2 py-3" type="password" name="password" placeholder="Password" />
-            <input class="w-full px-2 py-3" type="password" name="email" placeholder="Confirm Password" />
-            <button class="py-4 w-full text-white hover:bg-slate-100 hover:text-black transition font-bold">Next</button>
+        <form class="form bg-white flex flex-col items-start justify-center gap-6 p-5 w-full rounded-lg" @submit.prevent="" action="/"
+            method="post">
+            <h3 class="text-xl">Register</h3>
+            <!-- <InputText class="w-full border-2 rounded-3xl border-solid shadow-lg shadow-gray-200" type="text" name="username" placeholder="Username" /> -->
+            <span class="p-input-icon-right w-full">
+                <Icon class="input-svg absolute w-7 h-7 top-1/2 -translate-y-1/2" icon="ion:person-circle-outline" />
+                <InputText v-model="username" class="w-full border-2 rounded-3xl py-3 px-2.5 border-solid shadow-lg focus:shadow-inner shadow-gray-200" type="email" name="email" placeholder="Email Address" />
+            </span>
+            <span class="p-input-icon-right w-full">
+                <Icon class="input-svg absolute w-7 h-7 top-1/2 -translate-y-1/2" :icon="isPasswordVisible ? 'ion:eye-off-outline' : 'ion:eye-outline'" @click="isPasswordVisible = !isPasswordVisible" />
+                <InputText v-model="password" class="w-full border-2 rounded-3xl py-3 px-2.5 border-solid shadow-lg focus:shadow-inner shadow-gray-200" :type="isPasswordVisible ? 'text' : 'password'" name="password" placeholder="Password" />
+            </span>
+            <!-- <InputText class="w-full border-2 rounded-3xl border-solid shadow-lg shadow-gray-200" type="password" name="confirm-password" placeholder="Confirm Password" /> -->
+            <Button class="w-full justify-center py-[12px] bg-pb hover:bg-slate-700 rounded-3xl text-white dark:text-white dark:hover:bg-pb dark:bg-black tracking-widest">
+                <template v-if="!isLoading">Next</template>
+                <template v-else>...</template>
+            </Button>
+            <div>Already have an account? <a href="#" @click="goToLogin" class="text-pb hover:underline">Login</a></div>
+            <AuthDivider text="OR" />
+            <div class="flex flex-col gap-2.5 py-2.5 w-full">
+                <Button class="flex-auto flex outline-none justify-center hover:bg-gray-200 gap-2.5 px-2.5 py-2.5 border-2 border-gray-400"><Google class="h-8 w-8" /> Signup with Google</Button>
+                <Button class="flex-auto flex outline-none justify-center hover:bg-gray-200 gap-2.5 px-2.5 py-2.5 border-2 border-gray-400"><Facebook class="h-8 w-8" /> Signup with Facebook</Button>
+            </div>
         </form>
-    </div> 
+    </div>
 </template>
 
 
 <style scoped>
-.form{
-    max-width: 350px;
-    min-width: 270px;
-    border-radius: 8px;
-    box-shadow: 2px 5px 10px var(--parkoba-shadow);
+/* .form {
+    max-width: 400px;
+    min-width: 300px;
+    box-shadow: 2px 5px 10px 0px rgba(102, 102, 102, 0.336);
+} */
+
+svg{
+    z-index: 1;
+    cursor: pointer;
 }
-input{
-    background-color: var(--parkoba-text-color);
-    color: var(--parkoba-background-color);
+input{outline: none;}
+/* 
+input {
+    padding: 12px 5px;
 }
-button{
-    background: var(--parkoba-base-color);
+input:focus {
+    
 }
+
+button {
+    
+} */
 </style>

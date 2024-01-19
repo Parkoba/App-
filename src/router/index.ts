@@ -11,13 +11,13 @@ const routes: Array<RouteRecordRaw> = [
     path: '/get-started',
     component: () => import('@/views/IntroPage.vue')
   },
+  // {
+  //    path: '/login',
+  //    component: () => import('@/views/Login.vue')
+  // },
   {
-     path: '/login',
-     component: () => import('@/views/Login.vue')
-  },
-  {
-    path: '/register',
-    component: () => import('@/views/SignUp.vue')
+    path: '/join',
+    component: () => import('@/views/Join.vue'),
   },
   // {
   //   path: '/tabs/',

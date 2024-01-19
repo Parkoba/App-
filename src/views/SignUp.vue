@@ -5,7 +5,7 @@ import SignUpForm from '@/components/SignUpForm.vue';
         
 <template>
     <IonPage>
-        <div class="form-container">
+        <div class="form-container h-full">
             <SignUpForm />
         </div>
     </IonPage>
@@ -14,6 +14,6 @@ import SignUpForm from '@/components/SignUpForm.vue';
 
 <style scoped>
 .form-container {
-    height: 100%;
+    /* height: 100%; */
 }
 </style>

@@ -5,12 +5,21 @@ import svgLoader from 'vite-svg-loader'
 import { defineConfig } from 'vite'
 import AutoPrefixer from 'autoprefixer';
 import tailwindCSS from 'tailwindcss';
-import tailwindConfig from './tailwind.config.js';
+// @ts-ignore
+import tailwindConfig from './tailwind.config.ts';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    vue(),
+    vue({
+      template: {
+        compilerOptions:{
+          comments: false,
+          cacheHandlers: true,
+          prefixIdentifiers: true,
+        }
+      }
+    }),
     svgLoader({
       svgo: false,
     }),

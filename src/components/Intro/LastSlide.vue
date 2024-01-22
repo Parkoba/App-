@@ -15,19 +15,15 @@ watch(slide, () => {
 </script>
 
 <template>
-    <img src="/Euro-Money.jpg" alt="Cash" />
-    <img src="/gold-coin.jpg" id="gold-coin" alt="Gold Coin" />
+    <img class="absolute" src="/Euro-Money.jpg" alt="Cash" />
+    <img class="absolute" src="/gold-coin.jpg" id="gold-coin" alt="Gold Coin" />
 </template>
 
 <style scoped>
-img {
-    position: absolute;
-}
-
 #gold-coin {
     transform: translateY(-200px);
     opacity: 0;
     right: -30px;
-    bottom: -30px;
+    bottom: 0px;
 }
 </style>

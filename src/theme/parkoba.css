@@ -1,10 +1,11 @@
 :root {
     /** parkoba base **/
     --parkoba-shadow: 2px 4px 10px 0px #635e5e;
-    --parkoba-base-color: #AC3970;
+    --parkoba-base-color: #0F3877;
+    --parkoba-base-color-light: #436eaf;
     --parkoba-text-color: #000000;
     --parkoba-background-color: #FEFDFD;
- 
+    --parkoba-ripple-color: #c2bfbff3;
 }
 @media (prefers-color-scheme: dark) {
     /*
@@ -13,9 +14,10 @@
      */
   
     body {
-     --parkoba-shadow: 2px 4px 10px 0px #858080;
+     --parkoba-shadow: 2px 4px 10px 0px #413f3f;
      --parkoba-text-color: #ffffff;
-     --parkoba-base-color: #AC3970;
+     --parkoba-base-color: #0F3877;
+     --parkoba-ripple-color: #0F3877;
      --parkoba-background-color: #000000;
     }
   }

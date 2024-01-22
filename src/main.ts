@@ -1,6 +1,10 @@
 import { createApp } from 'vue'
-import App from './App.vue'
+import App from './App.vue';
+import PrimeVue from 'primevue/config';
+import { PrimeVueConfiguration } from 'primevue/config';
+import ToastService from 'primevue/toastservice';
 import router from './router';
+import Ripple from 'primevue/ripple'
 
 import { IonicVue } from '@ionic/vue';
 
@@ -8,7 +12,7 @@ import { IonicVue } from '@ionic/vue';
 import '@ionic/vue/css/core.css';
 
 /* Basic CSS for apps built with Ionic */
-import '@ionic/vue/css/normalize.css';
+// import '@ionic/vue/css/normalize.css';
 // import '@ionic/vue/css/structure.css';
 // import '@ionic/vue/css/typography.css';
 import '../public/styles/main.css';
@@ -24,9 +28,19 @@ import '../public/styles/main.css';
 /* Theme variables */
 import './theme/parkoba.css';
 
+/* Tailwind CSS */
+import '@/style.css';
+
+import 'primevue/resources/themes/viva-light/theme.css'
+// import 'primevue/resources/themes/lara-dark-blue/theme.css'
+
+import { defineCustomElements } from '@ionic/pwa-elements/loader';
+defineCustomElements(window);
+
 const app = createApp(App)
-  .use(IonicVue)
-  .use(router);
+  .use(IonicVue).use<PrimeVueConfiguration>(PrimeVue, {
+     ripple: true, 
+  }).use(ToastService).use(router).directive('ripple', Ripple);
   
 router.isReady().then(() => {
   app.mount('#app');

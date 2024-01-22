@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue';
 import PrimeVue from 'primevue/config';
 import { PrimeVueConfiguration } from 'primevue/config';
+import ToastService from 'primevue/toastservice';
 import router from './router';
 import Ripple from 'primevue/ripple'
 
@@ -31,17 +32,15 @@ import './theme/parkoba.css';
 import '@/style.css';
 
 import 'primevue/resources/themes/viva-light/theme.css'
+// import 'primevue/resources/themes/lara-dark-blue/theme.css'
 
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
 defineCustomElements(window);
 
 const app = createApp(App)
   .use(IonicVue).use<PrimeVueConfiguration>(PrimeVue, {
-     ripple: true,
-     ptOptions: {
-      mergeProps: true
-  } 
-  }).use(router).directive('ripple', Ripple);
+     ripple: true, 
+  }).use(ToastService).use(router).directive('ripple', Ripple);
   
 router.isReady().then(() => {
   app.mount('#app');

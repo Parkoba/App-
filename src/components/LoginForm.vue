@@ -38,9 +38,13 @@ username=ref('')
             </Button>
             <div>Don&apos;t have an account? <a href="#" @click="goToSignUp" class="text-pb hover:underline">Register now</a></div>
             <AuthDivider text="OR" />
-            <div class="flex flex-col gap-2.5 py-2.5 w-full">
-                <Button class="flex-auto flex outline-none justify-center hover:bg-gray-200 gap-2.5 px-2.5 py-2.5 border-2 border-gray-400"><Google class="h-8 w-8" /> Login with Google</Button>
-                <Button class="flex-auto flex outline-none justify-center hover:bg-gray-200 gap-2.5 px-2.5 py-2.5 border-2 border-gray-400"><Facebook class="h-8 w-8" /> Login with Facebook</Button>
+            <div class="flex gap-2.5 py-2.5 w-full">
+                <Button class="flex-auto flex w-20 outline-none justify-center hover:bg-gray-200 gap-2.5 px-2.5 py-2.5 border-2 border-gray-400"><Google class="h-8 w-8" /> 
+                    <!-- Login with Google -->
+                </Button>
+                <Button class="flex-auto flex w-20 outline-none justify-center hover:bg-gray-200 gap-2.5 px-2.5 py-2.5 border-2 border-gray-400"><Facebook class="h-8 w-8" /> 
+                    <!-- Login with Facebook -->
+                </Button>
             </div>
         </form>
     </div>

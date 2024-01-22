@@ -2,31 +2,35 @@
 import { defineAsyncComponent, provide, ref } from 'vue';
 import type { Component } from 'vue';
 import { IonPage } from '@ionic/vue';
-import LoadingDots from '@/components/LoadingDots.vue';
+import { useRegisterSW } from 'virtual:pwa-register/vue';
 import FormLoading from '@/components/FormLoading.vue';
+const isLoaded = ref<boolean>(false);
 const LoginForm = defineAsyncComponent({
     loader: () => {
         return new Promise<Component>((resolve, reject) => {
             setTimeout(async () => {
                 try{let res = await import('@/components/LoginForm.vue');
                 let r = res.default || res; 
-                resolve(r)}
+                isLoaded.value=true;
+                resolve(r)
+            }
                 catch(e){reject(e)}
             }, 1000);
         })
     },
     loadingComponent: FormLoading,
-    timeout: 3000,
+    timeout: 7000,
 });
 import SignUpForm from '@/components/SignUpForm.vue';
 const isSignUp = ref<boolean>(true);
+console.log(useRegisterSW)
 provide('isSignUp', isSignUp);
 </script>
         
 <template>
     <IonPage>
         <div class="form-container h-full">
-            <Transition mode="out-in">
+            <Transition name="form" mode="out-in">
                     <component :is="isSignUp ? SignUpForm: LoginForm" />
             </Transition>
         </div>
@@ -37,13 +41,12 @@ provide('isSignUp', isSignUp);
 <style scoped>
 .form-enter-active,
 .form-leave-active {
-    transition: 0.4s ease-in-out;
+    transition: 0.2s ease-in-out;
 }
 
 .form-enter-from,
 .form-leave-to {
     opacity: 0;
-    transform: translateY(30%) scaleY(0.5);
 }
 :deep(.form) {
     max-width: 400px;

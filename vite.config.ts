@@ -5,6 +5,7 @@ import svgLoader from 'vite-svg-loader'
 import { defineConfig } from 'vite'
 import AutoPrefixer from 'autoprefixer';
 import tailwindCSS from 'tailwindcss';
+import { VitePWA } from 'vite-plugin-pwa';
 // @ts-ignore
 import tailwindConfig from './tailwind.config.ts';
 
@@ -19,6 +20,12 @@ export default defineConfig({
           prefixIdentifiers: true,
         }
       }
+    }),
+    VitePWA({
+      manifest:{
+
+      },
+      registerType: 'autoUpdate',
     }),
     svgLoader({
       svgo: false,

@@ -17,6 +17,27 @@
     font-family: 'DM Sans' !important;
 }
 
+.p-toast-message{
+    border-radius: 10px;
+}
+.p-toast-message-content{
+    gap: 20px;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+.p-toast-message-content > :last-child {
+    margin-left: auto;
+}
+.p-toast-message-content i, .p-toast-message-content svg, .p-toast-message-content .p-icon, .p-toast-message-content > :last-child svg{
+    width: 18px;
+    height: 18px;
+}
+.p-toast-message-content svg{
+    margin-top: 5px;
+}
+.p-toast-message-text{
+    max-width: 275px;
+}
 /* .p-menuitem-link{background-color: transparent;}
 .p-steps-current .p-steps-number{background: var(--parkoba-base-color);} */
 #shadow {

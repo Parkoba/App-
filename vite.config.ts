@@ -23,14 +23,33 @@ export default defineConfig({
     }),
     VitePWA({
       manifest:{
-
+        name: 'Parkoba - Passion For Parking',
+        short_name: 'Parkoba',
+        theme_color: '#ffffff',
+        icons: [
+          {
+            src: '/images/Parkoba Logo-144x144.jpg',
+            sizes: '144x144',
+            type: 'image/png',
+          },
+          {
+            src: '/images/Parkoba Logo-192x192.jpg',
+            sizes: '192x192',
+            type: 'image/png',
+          },
+          {
+            src: '/images/Parkoba Logo-512x512.jpg',
+            sizes: '512x512',
+            type: 'image/png',
+          },
+        ],
+        display: 'minimal-ui',
       },
       registerType: 'autoUpdate',
     }),
     svgLoader({
       svgo: false,
     }),
-    // legacy()
   ],
   css: {
      postcss: {
@@ -47,6 +66,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      '~': path.resolve(__dirname, './assets'),
     },
   },
   server: {

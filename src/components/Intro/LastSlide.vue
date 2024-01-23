@@ -15,8 +15,8 @@ watch(slide, () => {
 </script>
 
 <template>
-    <img class="absolute" src="/Euro-Money.jpg" alt="Cash" />
-    <img class="absolute" src="/gold-coin.jpg" id="gold-coin" alt="Gold Coin" />
+    <img class="absolute" src="/images/Euro-Money.jpg" alt="Cash" />
+    <img class="absolute" src="/images/gold-coin.jpg" id="gold-coin" alt="Gold Coin" />
 </template>
 
 <style scoped>

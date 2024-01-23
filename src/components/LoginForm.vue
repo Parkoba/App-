@@ -3,6 +3,7 @@ import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import { ref, inject, Ref } from 'vue';
 import AuthDivider from '@/components/AuthDivider.vue';
+import LoadableButton from '@/components/LoadableButton.vue';
 import Google from '@/components/Google.svg';
 import Facebook from '@/components/Facebook.svg';
 import { Icon } from '@iconify/vue';
@@ -21,7 +22,7 @@ username=ref('')
     <div class="flex flex-col gap-6 items-center justify-center w-full h-full px-10">
         <form class="form bg-white flex flex-col items-start justify-center gap-6 p-5 w-full rounded-lg" @submit.prevent="" action="/"
             method="post">
-            <h3 class="text-xl">Login</h3>
+            <div class="w-full flex justify-between items-center"><h3 class="text-xl">Login</h3></div>
             <!-- <InputText class="w-full border-2 rounded-3xl border-solid shadow-lg shadow-gray-200" type="text" name="username" placeholder="Username" /> -->
             <span class="p-input-icon-right w-full">
                 <Icon class="input-svg absolute w-7 h-7 top-1/2 -translate-y-1/2" icon="ion:person-circle-outline" />
@@ -32,10 +33,9 @@ username=ref('')
                 <InputText v-model="password" class="w-full border-2 rounded-3xl py-3 px-2.5 border-solid shadow-lg focus:shadow-inner shadow-gray-200" :type="isPasswordVisible ? 'text' : 'password'" name="password" placeholder="Password" />
             </span>
             <!-- <InputText class="w-full border-2 rounded-3xl border-solid shadow-lg shadow-gray-200" type="password" name="confirm-password" placeholder="Confirm Password" /> -->
-            <Button class="w-full justify-center py-[12px] bg-pb hover:bg-slate-700 rounded-3xl text-white dark:text-white dark:hover:bg-pb dark:bg-black tracking-widest">
-                <template v-if="!isLoading">Next</template>
-                <template v-else>...</template>
-            </Button>
+            <LoadableButton :load="isLoading" class="w-full justify-center py-[12px] bg-pb hover:bg-slate-700 rounded-3xl text-white dark:text-white dark:hover:bg-pb dark:bg-black tracking-widest">
+                Next
+            </LoadableButton>
             <div>Don&apos;t have an account? <a href="#" @click="goToSignUp" class="text-pb hover:underline">Register now</a></div>
             <AuthDivider text="OR" />
             <div class="flex gap-2.5 py-2.5 w-full">

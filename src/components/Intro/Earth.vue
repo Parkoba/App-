@@ -3,8 +3,8 @@
 </script>
 
 <template>
-    <img src="/earth.jpg" class="earth" alt="Earth" />
-    <img src="/pin.jpg" class="pin" alt="Location Pin" />
+    <img src="/images/earth.jpg" class="earth" alt="Earth" />
+    <img src="/images/pin.jpg" class="pin" alt="Location Pin" />
 </template>
 
 <style scoped>

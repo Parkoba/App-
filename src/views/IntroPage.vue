@@ -61,7 +61,7 @@ import { } from '@ionic/vue'
                         <div class="graphics">
                             <CarPole />
                         </div>
-                        <strong class="heading">Picture of a Car with a Parking Spot</strong>
+                        <strong class="heading">Easy Parking Just For You</strong>
                     </div>
                     </SwiperSlide>
                     <SwiperSlide>

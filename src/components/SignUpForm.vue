@@ -2,6 +2,7 @@
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import Toast from 'primevue/toast';
+import LoadableButton from '@/components/LoadableButton.vue';
 import { useToast } from 'primevue/usetoast';
 import { ref, inject, Ref } from 'vue';
 import AuthDivider from '@/components/AuthDivider.vue';
@@ -46,10 +47,9 @@ username=ref('')
                 <Icon class="input-svg absolute w-7 h-7 top-1/2 -translate-y-1/2" :icon="isPassword1Visible ? 'ion:eye-off-outline' : 'ion:eye-outline'" @click="isPassword1Visible = !isPassword1Visible" />
                 <InputText v-model="password" class="w-full border-2 rounded-3xl py-3 px-2.5 border-solid shadow-lg focus:shadow-inner shadow-gray-200" :type="isPassword1Visible ? 'text' : 'password'" placeholder="Confirm Password" />
             </span> -->
-            <Button class="w-full justify-center py-[12px] bg-pb hover:bg-slate-700 rounded-3xl text-white dark:text-white dark:hover:bg-pb dark:bg-black tracking-widest" @click="addToast">
-                <template v-if="!isLoading">Next</template>
-                <template v-else>...</template>
-            </Button>
+            <LoadableButton :load="isLoading" class="w-full justify-center py-[12px] bg-pb hover:bg-slate-700 rounded-3xl text-white dark:text-white dark:hover:bg-pb dark:bg-black tracking-widest">
+                Next
+            </LoadableButton>
             <div>Already have an account? <a href="#" @click="goToLogin" class="text-pb hover:underline">Login</a></div>
             <AuthDivider text="OR" />
             <div class="flex gap-2.5 py-2.5 w-full">

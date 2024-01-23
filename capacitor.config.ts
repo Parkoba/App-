@@ -1,11 +1,14 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'parkoba.app',
   appName: 'Parkoba',
   webDir: 'dist',
   server: {
     androidScheme: 'https'
+  },
+  android:{
+
   }
 };
 

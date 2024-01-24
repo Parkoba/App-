@@ -43,8 +43,8 @@ import { } from '@ionic/vue'
     
 <template>
     <IonPage>
-        <div v-once>
-            <Swiper effect="coverflow" :speed="800" @slide-change="(e) => activeIndex = e.realIndex">
+        <div class="h-full">
+            <Swiper style="display: flex;" class="h-full flex-col justify-evenly" effect="coverflow" :speed="800" @slide-change="(e) => activeIndex = e.realIndex">
                 <!-- <SwiperSlide v-for="(slide, i) in slides">
                     <SlideContent :alt="slide.alt" :index="i" :heading="slide.heading" :image="slide.image" />
                 </SwiperSlide> -->
@@ -63,8 +63,8 @@ import { } from '@ionic/vue'
                         </div>
                         <strong class="heading">Easy Parking Just For You</strong>
                     </div>
-                    </SwiperSlide>
-                    <SwiperSlide>
+                </SwiperSlide>
+                <SwiperSlide>
                     <div class="slide_content">
                         <div class="graphics">
                             <!-- <img src="/Earth_Location.png" class="rotate" alt="Picture of the Earth showing how close you are to the parking spot" /> -->
@@ -72,24 +72,24 @@ import { } from '@ionic/vue'
                         </div>
                         <strong class="heading">Find A Spot Close To You</strong>
                     </div>
-                    </SwiperSlide>
-                    <SwiperSlide>
+                </SwiperSlide>
+                <SwiperSlide>
                     <div class="slide_content">
                         <div class="graphics">
-                            <img src="/Map.png" alt="Picture of a Map" />
+                            <img src="/images/Map.png" alt="Picture of a Map" />
                         </div>
                         <strong class="heading">Conveniently Situated</strong>
                     </div>
-                    </SwiperSlide>
-                    <SwiperSlide>
+                </SwiperSlide>
+                <SwiperSlide>
                     <div class="slide_content">
                         <div class="graphics">
                             <LastSlide />
                         </div>
                         <strong class="heading">Affordable & Accessible</strong>
                     </div>
-                    </SwiperSlide>
-                <div class="pagination flex justify-center items-center p-1.5 gap-3.5 mt-[50px]">
+                </SwiperSlide>
+                <div class="pagination flex justify-center items-center p-1.5 gap-3.5 mt-5">
                     <span v-for="(_, i)  in 5" :key="i" class="bullet" @click="activeIndex = i"
                         :class="{ active: i === activeIndex }"></span>
                 </div>
@@ -104,9 +104,16 @@ import { } from '@ionic/vue'
 /* .parkoba-logo{
     margin-left: 20px;
 } */
+.swiper {
+}
+
+.swiper :deep(.swiper-wrapper) {
+    height: fit-content;
+}
+
 .slide_content {
     display: flex;
-    height: fit-content; 
+    height: fit-content;
     flex-direction: column;
     align-items: center;
     text-align: center;
@@ -115,17 +122,16 @@ import { } from '@ionic/vue'
     padding: 20px 20px;
     gap: 20px;
 }
+
 @media (min-width: 500px) {
     .swiper-slide {
         display: flex;
         justify-content: center;
     }
+
     .slide_content {
         width: 450px;
     }
-}
-.swiper :deep(.swiper-wrapper) {
-    max-height: 400px;
 }
 
 .active {
@@ -138,14 +144,16 @@ import { } from '@ionic/vue'
     padding: 7px;
     box-shadow: var(--parkoba-shadow);
 }
-.heading{
+
+.heading {
     font-size: 1.4rem;
     color: var(--parkoba-text-color);
 }
 
-img.rotate{
+img.rotate {
     animation: spin 50s linear infinite;
 }
+
 :deep(.graphics) {
     position: relative;
     display: flex;
@@ -158,23 +166,26 @@ img.rotate{
     overflow-x: clip;
     overflow-y: hidden;
 }
+
 @keyframes spin {
     0% {
         transform: rotate(0deg);
     }
+
     100% {
         transform: rotate(360deg);
     }
 }
+
 @media (prefers-color-scheme: light) {
-    .slide_content{
+    .slide_content {
         background-color: rgba(255, 255, 255, 0.6);
     }
-    
+
 }
+
 @media (prefers-color-scheme: dark) {
-    .slide_content{
+    .slide_content {
         background-color: rgba(20, 19, 19, 0.6);
     }
-}
-</style>
+}</style>

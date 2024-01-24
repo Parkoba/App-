@@ -16,13 +16,16 @@ const isLoading = ref(false),
 isPasswordVisible = ref(false);
 const password = ref(''),
 username=ref('')
+function changeLoading(){
+    isLoading.value = !isLoading.value;
+}
 </script>
 
 <template>
     <div class="flex flex-col gap-6 items-center justify-center w-full h-full px-10">
         <form class="form bg-white flex flex-col items-start justify-center gap-6 p-5 w-full rounded-lg" @submit.prevent="" action="/"
             method="post">
-            <div class="w-full flex justify-between items-center"><h3 class="text-xl">Login</h3></div>
+            <div class="w-full flex justify-between items-center"><h3 class="text-xl">Login</h3><img src="/images/parkoba.png" width="50" height="50" alt="Parkoba Logo"></div>
             <!-- <InputText class="w-full border-2 rounded-3xl border-solid shadow-lg shadow-gray-200" type="text" name="username" placeholder="Username" /> -->
             <span class="p-input-icon-right w-full">
                 <Icon class="input-svg absolute w-7 h-7 top-1/2 -translate-y-1/2" icon="ion:person-circle-outline" />
@@ -33,10 +36,9 @@ username=ref('')
                 <InputText v-model="password" class="w-full border-2 rounded-3xl py-3 px-2.5 border-solid shadow-lg focus:shadow-inner shadow-gray-200" :type="isPasswordVisible ? 'text' : 'password'" name="password" placeholder="Password" />
             </span>
             <!-- <InputText class="w-full border-2 rounded-3xl border-solid shadow-lg shadow-gray-200" type="password" name="confirm-password" placeholder="Confirm Password" /> -->
-            <LoadableButton :load="isLoading" class="w-full justify-center py-[12px] bg-pb hover:bg-slate-700 rounded-3xl text-white dark:text-white dark:hover:bg-pb dark:bg-black tracking-widest">
+            <LoadableButton @click="changeLoading" :load="isLoading" class="flex items-center justify-center max-h-12 w-full py-[12px] bg-pb hover:bg-slate-700 rounded-3xl text-white dark:text-white dark:hover:bg-pb dark:bg-black tracking-widest">
                 Next
             </LoadableButton>
-            <div>Don&apos;t have an account? <a href="#" @click="goToSignUp" class="text-pb hover:underline">Register now</a></div>
             <AuthDivider text="OR" />
             <div class="flex gap-2.5 py-2.5 w-full">
                 <Button class="flex-auto flex w-20 outline-none justify-center hover:bg-gray-200 gap-2.5 px-2.5 py-2.5 border-2 border-gray-400"><Google class="h-8 w-8" /> 
@@ -46,6 +48,7 @@ username=ref('')
                     <!-- Login with Facebook -->
                 </Button>
             </div>
+            <div class="mt-2.5 text-center text-sm w-full">Don&apos;t have an account? <a href="#" @click="goToSignUp" class="text-pb hover:underline">Register now</a></div>
         </form>
     </div>
 </template>

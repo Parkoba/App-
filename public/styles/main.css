@@ -20,6 +20,10 @@
 .p-toast-message{
     border-radius: 10px;
 }
+.p-toast{
+    min-width: 300px;
+    max-width: 90%;
+}
 .p-toast-message-content{
     gap: 20px;
     padding: 15px;
@@ -35,9 +39,9 @@
 .p-toast-message-content svg{
     margin-top: 5px;
 }
-.p-toast-message-text{
+/* .p-toast-message-text{
     max-width: 275px;
-}
+} */
 /* .p-menuitem-link{background-color: transparent;}
 .p-steps-current .p-steps-number{background: var(--parkoba-base-color);} */
 #shadow {

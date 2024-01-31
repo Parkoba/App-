@@ -12,19 +12,19 @@ const isImageSelected = ref(false),
     imageFile = ref<File>(),
     filePicker = ref<HTMLElement>();
 async function onFileChange(e: Event) {
-    const image = await Camera.getPhoto({
-        quality: 90,
-        source: CameraSource.Photos,
-        allowEditing: true,
-        resultType: CameraResultType.Uri
-    });
+    // const image = await Camera.getPhoto({
+    //     quality: 90,
+    //     source: CameraSource.Photos,
+    //     allowEditing: true,
+    //     resultType: CameraResultType.Uri
+    // });
     
-    // const file = (e.target as HTMLInputElement).files?.[0];
-    // if (file) {
-    //     isImageSelected.value = true;
-    //     imageFile.value=file;
-    //     image.value = URL.createObjectURL(file);
-    // }
+    const file = (e.target as HTMLInputElement).files?.[0];
+    if (file) {
+        isImageSelected.value = true;
+        imageFile.value=file;
+        image.value = URL.createObjectURL(file);
+    }
 }
 function removeImage() {
     isImageSelected.value = false;

@@ -10,10 +10,10 @@ import LoginForm from '@/components/SignUpForm.vue';
 
 
 <style scoped>
-.form-container {
-    /* display: flex;
+/* .form-container {
+    display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center; */
-}
+    justify-content: center;
+} */
 </style>

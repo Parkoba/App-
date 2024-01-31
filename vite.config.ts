@@ -16,7 +16,6 @@ export default defineConfig({
       template: {
         compilerOptions:{
           comments: false,
-          cacheHandlers: true,
           prefixIdentifiers: true,
         }
       }
@@ -72,5 +71,9 @@ export default defineConfig({
   server: {
     port: 5000,
     strictPort: true,
+  },
+  build:{
+    minify: 'terser',
+    cssMinify: 'lightningcss'
   }
 })

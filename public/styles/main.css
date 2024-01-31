@@ -10,6 +10,7 @@
     font-weight: normal;
 }
 
+
 *{
     margin: 0;
     padding: 0;
@@ -17,6 +18,9 @@
     font-family: 'DM Sans' !important;
 }
 
+.pi{
+    font-family: 'primeicons' !important;
+}
 .p-toast-message{
     border-radius: 10px;
 }
@@ -39,6 +43,10 @@
 .p-toast-message-content svg{
     margin-top: 5px;
 }
+.p-tooltip-text{
+    padding: 3px 10px;
+    margin-bottom: 3px;
+}
 /* .p-toast-message-text{
     max-width: 275px;
 } */
@@ -46,6 +54,24 @@
 .p-steps-current .p-steps-number{background: var(--parkoba-base-color);} */
 #shadow {
     fill: #f7f1f1;
+}
+
+.intro-button-enter-active, .intro-button-leave-active {
+    transition: 0.3s ease-in-out;
+}
+.intro-button-enter-from, .intro-button-leave-to {
+    transform: translateY(20px);
+    opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: 0.2s ease-in-out;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
 }
 
 @media (prefers-color-scheme: dark) {

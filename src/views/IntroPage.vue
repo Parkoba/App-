@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import 'swiper/css';
-import { IonPage } from '@ionic/vue';
+import { IonPage, useBackButton, useIonRouter } from '@ionic/vue';
 // import SlideContent from '@/components/Intro/SlideContent.vue';
 import Welcome from '@/components/Intro/Welcome.svg';
 import CarPole from '@/components/Intro/Car_Pole.vue';
@@ -38,6 +38,7 @@ provide('activeIndex', activeIndex);
 //     }
 // ];
 import { } from '@ionic/vue'
+import { App } from '@capacitor/app';
 
 </script>
     
@@ -101,12 +102,6 @@ import { } from '@ionic/vue'
 
 
 <style scoped>
-/* .parkoba-logo{
-    margin-left: 20px;
-} */
-.swiper {
-}
-
 .swiper :deep(.swiper-wrapper) {
     height: fit-content;
 }

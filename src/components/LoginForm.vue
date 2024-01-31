@@ -1,21 +1,42 @@
 <script setup lang="ts">
-import Button from 'primevue/button';
-import InputText from 'primevue/inputtext';
+import * as yup from 'yup';
 import { ref, inject, Ref } from 'vue';
+import { useForm } from 'vee-validate';
+import { Icon } from '@iconify/vue';
+import { useToast } from 'primevue/usetoast';
+import Button from 'primevue/button';
+import Toast from 'primevue/toast';
+import InputText from 'primevue/inputtext';
 import AuthDivider from '@/components/AuthDivider.vue';
 import LoadableButton from '@/components/LoadableButton.vue';
 import Google from '@/components/Google.svg';
 import Facebook from '@/components/Facebook.svg';
-import { Icon } from '@iconify/vue';
-const isLogin = inject<Ref<boolean>>('isSignUp')
+
+const toast = useToast();
+const isLogin = inject<Ref<boolean>>('isSignUp');
+    const schema = yup.object({
+    email: yup.string().matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 'Email Address is invalid').required('Email Address is required'),
+    password: yup.string().required('Password is required')
+});
+
+const { defineField, errors, handleSubmit } = useForm({
+    validationSchema: schema,
+});
+
+const [email, emailAttrs] = defineField('email');
+const [password, passwordAttrs] = defineField('password');
+
+const onSubmit = handleSubmit((values) => {
+    toast.add({ severity: 'success', summary: 'Form Submitted', detail: JSON.stringify(values), life: 3000 });
+});
+
 function goToSignUp(e: Event){
    e.preventDefault();
    isLogin? isLogin.value=true: '';
 }
 const isLoading = ref(false), 
 isPasswordVisible = ref(false);
-const password = ref(''),
-username=ref('')
+
 function changeLoading(){
     isLoading.value = !isLoading.value;
 }
@@ -23,20 +44,33 @@ function changeLoading(){
 
 <template>
     <div class="flex flex-col gap-6 items-center justify-center w-full h-full px-10">
-        <form class="form bg-white flex flex-col items-start justify-center gap-6 p-5 w-full rounded-lg" @submit.prevent="" action="/"
+        <Toast />
+        <form class="form bg-white flex flex-col items-start justify-center gap-3 p-5 w-full rounded-lg" @submit.prevent="" action="/"
             method="post">
-            <div class="w-full flex justify-between items-center"><h3 class="text-xl">Login</h3><img src="/images/parkoba.png" width="50" height="50" alt="Parkoba Logo"></div>
+            <h3 class="text-xl">Login</h3>
             <!-- <InputText class="w-full border-2 rounded-3xl border-solid shadow-lg shadow-gray-200" type="text" name="username" placeholder="Username" /> -->
-            <span class="p-input-icon-right w-full">
-                <Icon class="input-svg absolute w-7 h-7 top-1/2 -translate-y-1/2" icon="ion:person-circle-outline" />
-                <InputText v-model="username" class="w-full border-2 rounded-3xl py-3 px-2.5 border-solid shadow-lg focus:shadow-inner shadow-gray-200" type="email" name="email" placeholder="Email Address" />
-            </span>
-            <span class="p-input-icon-right w-full">
-                <Icon class="input-svg absolute w-7 h-7 top-1/2 -translate-y-1/2" :icon="isPasswordVisible ? 'ion:eye-off-outline' : 'ion:eye-outline'" @click="isPasswordVisible = !isPasswordVisible" />
-                <InputText v-model="password" class="w-full border-2 rounded-3xl py-3 px-2.5 border-solid shadow-lg focus:shadow-inner shadow-gray-200" :type="isPasswordVisible ? 'text' : 'password'" name="password" placeholder="Password" />
-            </span>
+            <div class="signup-input w-full">
+                <div class="p-input-icon-right w-full">
+                    <Icon class="input-svg absolute w-7 h-7 top-1/2 -translate-y-1/2" icon="ion:mail-outline" />
+                    <InputText v-model="email" :class="{ 'invalid': errors.email }" v-bind="emailAttrs"
+                        class="w-full border-2 py-3 px-2.5 border-solid shadow-lg focus:shadow-inner shadow-gray-200"
+                        type="email" name="email" placeholder="Email Address" />
+                </div>
+                <small class="p-error">{{ errors.email }} </small>
+            </div>
+            <div class="signup-input w-full">
+                <div class="p-input-icon-right w-full">
+                    <Icon class="input-svg absolute w-7 h-7 top-1/2 -translate-y-1/2"
+                        :icon="isPasswordVisible ? 'ion:eye-off-outline' : 'ion:eye-outline'"
+                        @click="isPasswordVisible = !isPasswordVisible" />
+                    <InputText v-model="password" :class="{ 'invalid': errors.password }" v-bind="passwordAttrs"
+                        class="w-full border-2 py-3 px-2.5 border-solid shadow-lg focus:shadow-inner shadow-gray-200"
+                        :type="isPasswordVisible ? 'text' : 'password'" name="password" placeholder="Password" />
+                </div>
+                <small class="p-error">{{ errors.password }} </small>
+            </div>
             <!-- <InputText class="w-full border-2 rounded-3xl border-solid shadow-lg shadow-gray-200" type="password" name="confirm-password" placeholder="Confirm Password" /> -->
-            <LoadableButton @click="changeLoading" :load="isLoading" class="flex items-center justify-center max-h-12 w-full py-[12px] bg-pb hover:bg-slate-700 rounded-3xl text-white dark:text-white dark:hover:bg-pb dark:bg-black tracking-widest">
+            <LoadableButton @click="(e)=>{changeLoading();onSubmit(e)}" :load="isLoading" class="man-signup flex items-center justify-center max-h-12 w-full py-[12px] bg-pb hover:bg-slate-700 rounded-3xl text-white dark:text-white dark:hover:bg-pb dark:bg-black tracking-widest">
                 Next
             </LoadableButton>
             <AuthDivider text="OR" />
@@ -61,11 +95,6 @@ function changeLoading(){
     box-shadow: 2px 5px 10px 0px rgba(102, 102, 102, 0.336);
 } */
 
-svg{
-    z-index: 1;
-    cursor: pointer;
-}
-input{outline: none;}
 /* 
 input {
     padding: 12px 5px;

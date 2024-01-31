@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'parkoba.app',
+  appId: 'com.parkoba',
   appName: 'Parkoba',
   webDir: 'dist',
   server: {

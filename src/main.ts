@@ -8,6 +8,8 @@ import Ripple from 'primevue/ripple'
 
 import { IonicVue } from '@ionic/vue';
 
+import 'vue-advanced-cropper/dist/style.css';
+
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/vue/css/core.css';
 
@@ -31,6 +33,7 @@ import './theme/parkoba.css';
 /* Tailwind CSS */
 import '@/style.css';
 
+import 'primeicons/primeicons.css';
 import 'primevue/resources/themes/viva-light/theme.css'
 // import 'primevue/resources/themes/lara-dark-blue/theme.css'
 
@@ -38,7 +41,7 @@ import { defineCustomElements } from '@ionic/pwa-elements/loader';
 defineCustomElements(window);
 
 const app = createApp(App)
-  .use(IonicVue).use<PrimeVueConfiguration>(PrimeVue, {
+.use(IonicVue).use<PrimeVueConfiguration>(PrimeVue, {
      ripple: true, 
   }).use(ToastService).use(router).directive('ripple', Ripple);
   

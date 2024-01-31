@@ -26,13 +26,6 @@ const isSlideEnd = toRef(swiperEl.value, 'isEnd');
 
 
 <style scoped>
-.intro-button-enter-active, .intro-button-leave-active {
-     transition: 0.3s ease-in-out;
-}
-.intro-button-enter-from, .intro-button-leave-to {
-     transform: translateY(20px);
-     opacity: 0;
-}
 /* .proceed-plane{
     display: flex;
     justify-content: flex-end;

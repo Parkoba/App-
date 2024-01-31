@@ -1,8 +1,13 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
-import { App } from '@capacitor/app';
+import { App, BackButtonListener, BackButtonListenerEvent } from '@capacitor/app';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import TabsPage from '../views/TabsPage.vue'
+import { BackButtonEvent, useBackButton, useIonRouter } from '@ionic/vue';
+import { useRouter } from 'vue-router';
+import { PluginListenerHandle } from '@capacitor/core';
+let i = 0;
+export let timeout: number;
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -50,4 +55,31 @@ const router = createRouter({
   routes
 })
 
-export default router
+// function closeAppOnBack(e: BackButtonListenerEvent) {
+//     i++;
+//     e
+//     console.log('Works')
+//     timeout = setTimeout(() => {
+//         if (i >= 2) {
+//             if (timeout) clearTimeout(timeout);
+//             i = 0;
+//             return App.exitApp();
+//         }
+//     }, 500)
+// }
+// router.afterEach(async (to, from, next) => {
+//   let a:PluginListenerHandle;
+//   if (from.path === '/get-started') {
+//      a= await App.addListener('backButton', closeAppOnBack);  
+//   }
+  
+// })
+
+useBackButton(-1, () => {
+      const ionRouter = useIonRouter();
+      if (!ionRouter.canGoBack()) {
+          App.exitApp();
+      }
+});
+
+export default router;

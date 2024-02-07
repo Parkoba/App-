@@ -45,3 +45,9 @@ export function useLazyComponent<T extends () => Promise<{ default: Component }>
   });
   return { isLoaded, comp };
 }
+
+export async function getBlobFromUrl(url: string){
+  const response = await fetch(url);
+  const blob = await response.blob();
+  return blob
+}

@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref, inject, Ref, reactive, computed, watch, watchEffect, defineAsyncComponent } from 'vue';
+import { ref, inject, Ref, reactive, provide } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
+import Steps from 'primevue/steps';
 import Toast from 'primevue/toast';
 import LoadableButton from '@/components/LoadableButton.vue';
 // import PicturePicker from '@/components/PicturePicker.vue';
@@ -14,6 +15,8 @@ const isSignUp = inject<Ref<boolean>>('isSignUp');
 import { useForm } from 'vee-validate';
 import * as yup from 'yup';
 import { useLazyComponent } from '@/utils';
+import { SignUpDetails, YupSignUpDetails, toRef1 } from '@/types';
+import { MenuItem } from 'primevue/menuitem';
 
 const { comp: PicturePicker } = useLazyComponent(() => import('@/components/PicturePicker.vue'));
 const toast = useToast();
@@ -24,9 +27,11 @@ const schema = yup.object({
         message: 'Must be at least 8 characters and must contain a number and special character'
     }).required('Password is required'),
     password2: yup.string().oneOf([yup.ref('password')], 'Passwords must match').required('Confirmation Password is required'),
+    address: yup.string().required('Address is required'),
+    phoneNumber: yup.string().matches(/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/, 'Phone Number is invalid').required('Phone Number is required')
 });
 
-const { defineField, errors, handleSubmit } = useForm({
+const { defineField, errors, handleSubmit, validateField } = useForm<YupSignUpDetails>({
     validationSchema: schema,
 });
 
@@ -35,6 +40,8 @@ const [fullName, fullNameAttrs] = defineField('fullName');
 const [email, emailAttrs] = defineField('email');
 const [password, passwordAttrs] = defineField('password');
 const [password2, password2Attrs] = defineField('password2');
+const [address, addressAttrs] = defineField('address');
+const [phoneNumber, phoneAttrs] = defineField('phoneNumber');
 
 function goToLogin(e: Event) {
     e.preventDefault();
@@ -46,74 +53,133 @@ function goToLogin(e: Event) {
 const isLoading = ref(false),
     isPassword1Visible = ref(false),
     isPassword2Visible = ref(false),
-    isFormSubmitted=ref(false);
-// password2 = ref(''),
-
-// watch([password2, password], (a) => {
-    //     passwordEqual.value = a[0] === a[1]
-    // })
-    // const form = reactive({
-        //     username: '',
-        //     email: '',
-        //     password: '',
-        //     password2: '',
-//     buttonDisabled: true,
-// });
+    isFormSubmitted = ref(false),
+    signUpForm = reactive<toRef1<SignUpDetails>>({
+        fullName,
+        email,
+        password,
+        profilePicture: null,
+        phoneNumber,
+        address
+    }),
+    steps: MenuItem[] = [
+        { label: '1', },
+        { label: '2' }
+    ];
+const activeStep = ref(0);
+provide('signUpForm', signUpForm)
 function changeLoading() {
-    isLoading.value = !isLoading.value;
+    isLoading.value = true;
+    setTimeout(() => { isLoading.value = false }, 2000)
 }
 const onSubmit = handleSubmit((values) => {
-    toast.add({ severity: 'success', summary: 'Form Submitted', detail: JSON.stringify(values), life: 3000 });
-    isFormSubmitted.value=true;
+    const obj = Array.from(Object.entries(values)).map(([key, value]) => (`${key}: ${value}`));
+    toast.add({ severity: 'success', summary: 'Form Submitted', detail: obj.join('\n') });
+    isFormSubmitted.value = true;
 });
+
+async function goToNextStep() {
+    const result = (await validateField('password')).valid &&
+        (await validateField('password2')).valid &&
+        (await validateField('fullName')).valid &&
+        (await validateField('email')).valid;
+
+    if (result) {
+        activeStep.value = activeStep.value === 0 ? 1 : 0;
+    }
+}
 
 </script>
 
 <template>
     <div class="flex gap-6 items-center justify-center w-full h-full px-10">
         <Toast position="top-center" />
-        <form class="form bg-white px-5 py-2.5 w-full rounded-lg" @submit.prevent="" action="/" method="post" v-if="!isFormSubmitted">
-            <h3 class="text-xl mb-2.5">Register</h3>
-            <div class="signup-input">
-                <div class=" p-input-icon-right w-full">
-                    <Icon class="input-svg absolute w-7 h-7 top-1/2 -translate-y-1/2" icon="ion:person-circle-outline" />
-                    <InputText v-model="fullName" v-bind="fullNameAttrs" :class="{ 'invalid': errors.fullName }"
-                        class="w-full border-2 py-3 px-2.5 border-solid shadow-lg focus:shadow-inner shadow-gray-200"
-                        type="text" name="fullName" placeholder="Full Name" />
-                </div>
-                <small class="p-error">{{ errors.fullName }} </small>
+        <form class="form bg-white px-3 py-2.5 w-full rounded-lg" @submit.prevent="" action="/" method="post"
+            v-if="!isFormSubmitted">
+            <div class="flex items-center justify-between mb-2.5">
+                <h3 class="inline text-xl">Register</h3>
+                <Steps :activeStep="activeStep" :model="steps" class="custom-steps">
+                    <template #item="{ item, active }">
+                        <strong
+                            :class="['select-none inline-flex items-center justify-center w-9 h-9 rounded-full', { 'bg-black text-white': active, 'text-black cursor-pointer': !active }]">
+                            {{ item.label }}
+                        </strong>
+                    </template>
+                </Steps>
             </div>
-            <div class="signup-input">
-                <div class="p-input-icon-right w-full">
-                    <Icon class="input-svg absolute w-7 h-7 top-1/2 -translate-y-1/2" icon="ion:mail-outline" />
-                    <InputText v-model="email" :class="{ 'invalid': errors.email }" v-bind="emailAttrs"
-                        class="w-full border-2 py-3 px-2.5 border-solid shadow-lg focus:shadow-inner shadow-gray-200"
-                        type="email" name="email" placeholder="Email Address" />
-                </div>
-                <small class="p-error">{{ errors.email }} </small>
-            </div>
-            <div class="signup-input">
-                <div class="p-input-icon-right w-full">
-                    <Icon class="input-svg absolute w-7 h-7 top-1/2 -translate-y-1/2"
-                        :icon="isPassword1Visible ? 'ion:eye-off-outline' : 'ion:eye-outline'"
-                        @click="isPassword1Visible = !isPassword1Visible" />
-                    <InputText v-model="password" :class="{ 'invalid': errors.password }" v-bind="passwordAttrs"
-                        class="w-full border-2 py-3 px-2.5 border-solid shadow-lg focus:shadow-inner shadow-gray-200"
-                        :type="isPassword1Visible ? 'text' : 'password'" name="password" placeholder="Password" />
-                </div>
-                <small class="p-error">{{ errors.password }} </small>
-            </div>
-            <div class="signup-input">
-                <div class="p-input-icon-right w-full">
-                    <Icon class="input-svg absolute w-7 h-7 top-1/2 -translate-y-1/2"
-                        :icon="isPassword2Visible ? 'ion:eye-off-outline' : 'ion:eye-outline'"
-                        @click="isPassword2Visible = !isPassword2Visible" />
-                    <InputText v-model="password2" :class="{ 'invalid': errors.password2 }"
-                        class="w-full border-2 py-3 px-2.5 border-solid shadow-lg focus:shadow-inner shadow-gray-200"
-                        :type="isPassword2Visible ? 'text' : 'password'" name="password" placeholder="Password"
-                        v-bind="password2Attrs" />
-                </div>
-                <small class="p-error">{{ errors.password2 }} </small>
+            <div class="w-full flex items-center justify-center gap-2.5 px-1 pt-1 overflow-clip">
+                <Transition :name="activeStep === 0 ? 'step-1' : 'step-2'" mode="out-in">
+                    <div v-if="activeStep === 0" class="w-full">
+                        <div class="signup-input">
+                            <div class=" p-input-icon-right w-full">
+                                <Icon class="input-svg absolute w-7 h-7 top-1/2 -translate-y-1/2"
+                                    icon="ion:person-circle-outline" />
+                                <InputText v-model="signUpForm.fullName" v-bind="fullNameAttrs"
+                                    :class="{ 'invalid': errors.fullName }"
+                                    class="w-full border-2 py-3 px-2.5 border-solid shadow-lg focus:shadow-inner shadow-gray-200"
+                                    type="text" name="fullName" placeholder="Full Name" />
+                            </div>
+                            <small class="p-error">{{ errors.fullName }} </small>
+                        </div>
+                        <div class="signup-input">
+                            <div class="p-input-icon-right w-full">
+                                <Icon class="input-svg absolute w-7 h-7 top-1/2 -translate-y-1/2" icon="ion:mail-outline" />
+                                <InputText v-model="signUpForm.email" :class="{ 'invalid': errors.email }"
+                                    v-bind="emailAttrs"
+                                    class="w-full border-2 py-3 px-2.5 border-solid shadow-lg focus:shadow-inner shadow-gray-200"
+                                    type="email" name="email" placeholder="Email Address" />
+                            </div>
+                            <small class="p-error">{{ errors.email }} </small>
+                        </div>
+                        <div class="signup-input">
+                            <div class="p-input-icon-right w-full">
+                                <Icon class="cursor-pointer input-svg absolute w-7 h-7 top-1/2 -translate-y-1/2"
+                                    :icon="isPassword1Visible ? 'ion:eye-off-outline' : 'ion:eye-outline'"
+                                    @click="isPassword1Visible = !isPassword1Visible" />
+                                <InputText v-model="signUpForm.password" :class="{ 'invalid': errors.password }"
+                                    v-bind="passwordAttrs"
+                                    class="w-full border-2 py-3 px-2.5 border-solid shadow-lg focus:shadow-inner shadow-gray-200"
+                                    :type="isPassword1Visible ? 'text' : 'password'" name="password"
+                                    placeholder="Password" />
+                            </div>
+                            <small class="p-error">{{ errors.password }} </small>
+                        </div>
+                        <div class="signup-input">
+                            <div class="p-input-icon-right w-full">
+                                <Icon class="cursor-pointer input-svg absolute w-7 h-7 top-1/2 -translate-y-1/2"
+                                    :icon="isPassword2Visible ? 'ion:eye-off-outline' : 'ion:eye-outline'"
+                                    @click="isPassword2Visible = !isPassword2Visible" />
+                                <InputText v-model="password2" :class="{ 'invalid': errors.password2 }"
+                                    class="w-full border-2 py-3 px-2.5 border-solid shadow-lg focus:shadow-inner shadow-gray-200"
+                                    :type="isPassword2Visible ? 'text' : 'password'" name="password" placeholder="Password"
+                                    v-bind="password2Attrs" />
+                            </div>
+                            <small class="p-error">{{ errors.password2 }} </small>
+                        </div>
+                    </div>
+                    <div v-else class="w-full">
+                        <div class="signup-input">
+                            <div class="p-input-icon-right w-full">
+                                <Icon class="input-svg absolute w-7 h-7 top-1/2 -translate-y-1/2"
+                                    icon="ph:address-book-light" />
+                                <InputText v-model="signUpForm.address" :class="{ 'invalid': errors.address }"
+                                    v-bind="addressAttrs"
+                                    class="w-full border-2 py-3 px-2.5 border-solid shadow-lg focus:shadow-inner shadow-gray-200"
+                                    placeholder="Address" />
+                            </div>
+                            <small class="p-error">{{ errors.address }} </small>
+                        </div>
+                        <div class="signup-input">
+                            <div class="p-input-icon-right w-full">
+                                <Icon class="input-svg absolute w-7 h-7 top-1/2 -translate-y-1/2" icon="ion:call-outline" />
+                                <InputText v-model="signUpForm.phoneNumber" :class="{ 'invalid': errors.phoneNumber }"
+                                    class="w-full border-2 py-3 px-2.5 border-solid shadow-lg focus:shadow-inner shadow-gray-200"
+                                    type="tel" placeholder="Mobile Number" v-bind="phoneAttrs" />
+                            </div>
+                            <small class="p-error">{{ errors.phoneNumber }} </small>
+                        </div>
+                    </div>
+                </Transition>
             </div>
             <!-- <span class="p-input-icon-right w-full">
                 <Icon class="input-svg absolute w-7 h-7 top-1/2 -translate-y-1/2" :icon="isPassword1Visible ? 'ion:eye-off-outline' : 'ion:eye-outline'" @click="isPassword1Visible = !isPassword1Visible" />
@@ -123,24 +189,28 @@ const onSubmit = handleSubmit((values) => {
             <!-- <div>
                 <div class="flex items-center gap-1.5 text-sm mb-1"><span class="v-check"></span> Must be atleast 8
                     characters</div>
-                <div class="flex items-center gap-1.5 text-sm mb-1"><span class="v-check"></span> Must contain a number and
-                    special character</div>
-                <div class="flex items-center gap-1.5 text-sm mb-1"><span class="v-check"></span> Both passwords must match
-                </div>
-            </div> -->
-            <LoadableButton @click="onSubmit" :load="isLoading"
+                    <div class="flex items-center gap-1.5 text-sm mb-1"><span class="v-check"></span> Must contain a number and
+                        special character</div>
+                        <div class="flex items-center gap-1.5 text-sm mb-1"><span class="v-check"></span> Both passwords must match
+                        </div>
+                    </div> -->
+            <Button v-if="activeStep === 0" type="button" @click="goToNextStep"
                 class="man-signup mt-5 disabled:bg-gray-500 flex items-center justify-center max-h-12 w-full py-[12px] bg-pb hover:bg-slate-700 rounded-3xl text-white dark:text-white dark:hover:bg-pb dark:bg-black tracking-widest">
                 Next
+            </Button>
+            <LoadableButton v-else type="button" @click="onSubmit" :load="isLoading"
+                class="man-signup mt-5 disabled:bg-gray-500 flex items-center justify-center max-h-12 w-full py-[12px] bg-pb hover:bg-slate-700 rounded-3xl text-white dark:text-white dark:hover:bg-pb dark:bg-black tracking-widest">
+                Submit
             </LoadableButton>
             <AuthDivider text="OR" />
             <div class="flex gap-2.5 py-2.5 w-full">
                 <Button
-                    class="flex flex-auto w-20 outline-none justify-center hover:bg-gray-100 gap-2.5 px-2.5 py-2.5 border-2 border-gray-400">
+                    class="flex flex-auto w-20 outline-none justify-center hover:bg-gray-200 gap-2.5 px-2.5 py-2.5 border-2 border-gray-400">
                     <Google class="h-8 w-8" />
                     <!-- Signup with Google -->
                 </Button>
                 <Button
-                    class="flex flex-auto w-20 outline-none justify-center hover:bg-gray-100 gap-2.5 px-2.5 py-1.5 border-2 border-gray-400">
+                    class="flex flex-auto w-20 outline-none justify-center hover:bg-gray-200 gap-2.5 px-2.5 py-1.5 border-2 border-gray-400">
                     <Facebook class="h-8 w-8" />
                     <!-- Signup with Facebook -->
                 </Button>
@@ -154,6 +224,37 @@ const onSubmit = handleSubmit((values) => {
 
 
 <style scoped>
+.custom-steps :deep(ol) {
+    gap: 5px;
+}
+
+.step-1-enter-active,
+.step-1-leave-active,
+.step-2-enter-active,
+.step-2-leave-active {
+    transition: 0.3s ease-in-out;
+}
+
+.step-1-enter-from {
+    transform: translateX(-100%);
+    opacity: 0;
+}
+
+.step-1-leave-to {
+    transform: translateX(100%);
+    opacity: 0;
+}
+
+.step-2-enter-from {
+    transform: translateX(100%);
+    opacity: 0;
+}
+
+.step-2-leave-to {
+    transform: translateX(-100%);
+    opacity: 0;
+}
+
 /* .form {
     max-width: 400px;
     min-width: 300px;
@@ -186,5 +287,4 @@ input:focus {
 
 button {
     
-} */
-</style>
+} */</style>

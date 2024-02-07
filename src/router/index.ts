@@ -1,13 +1,11 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 import { App, BackButtonListener, BackButtonListenerEvent } from '@capacitor/app';
-import { Filesystem, Directory } from '@capacitor/filesystem';
-import TabsPage from '../views/TabsPage.vue'
-import { BackButtonEvent, useBackButton, useIonRouter } from '@ionic/vue';
-import { useRouter } from 'vue-router';
-import { PluginListenerHandle } from '@capacitor/core';
-let i = 0;
-export let timeout: number;
+import { useBackButton, useIonRouter } from '@ionic/vue';
+import { Preferences } from '@capacitor/preferences';
+import { USERPROFILE, profilePictureUri } from '@/constants';
+import { Capacitor } from '@capacitor/core';
+import { Directory, Filesystem } from '@capacitor/filesystem';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -81,5 +79,34 @@ useBackButton(-1, () => {
           App.exitApp();
       }
 });
+let profilePicBlobUrl='';
+getProfilePicture().catch();
 
+async function getProfilePicture(){
+  if(Capacitor.isNativePlatform()) {
+    const { value } = await Preferences.get({ key: 'profile_picture' });
+    value && (profilePictureUri.value=value);
+  }
+  else{
+   const result = await Filesystem.readFile({
+     path: USERPROFILE,
+     directory: Directory.Data
+   }).catch(()=>({data: ''}));
+   profilePicBlobUrl = createBlobUrl(result.data) || '';
+   profilePictureUri.value = profilePicBlobUrl;
+  }
+}
+
+function createBlobUrl(blob: Blob|any){
+    if(blob instanceof Blob){
+      return URL.createObjectURL(blob);
+    }
+}
+
+router.afterEach(async (to, from) => {
+  await getProfilePicture();
+})
+router.beforeEach(()=>{
+  URL.revokeObjectURL(profilePicBlobUrl);
+})
 export default router;

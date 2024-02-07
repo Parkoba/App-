@@ -1,35 +1,59 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { Cropper } from "vue-advanced-cropper";
+import { inject, onMounted, ref } from "vue";
+import { Cropper, CropperResult } from "vue-advanced-cropper";
 import SpeedDial from "primevue/speeddial";
 import UnKnownPerson from "@/components/IonPerson.svg";
-import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Preferences } from '@capacitor/preferences';
+import { SignUpDetails } from "@/types";
+import { USERPROFILE, profilePictureUri } from "@/constants";
+import { Capacitor } from "@capacitor/core";
 
 const isImageSelected = ref(false),
     image = ref<string | null>(null),
-    imageFile = ref<File>(),
-    filePicker = ref<HTMLElement>();
-async function onFileChange(e: Event) {
-    // const image = await Camera.getPhoto({
-    //     quality: 90,
-    //     source: CameraSource.Photos,
-    //     allowEditing: true,
-    //     resultType: CameraResultType.Uri
-    // });
-    
-    const file = (e.target as HTMLInputElement).files?.[0];
-    if (file) {
-        isImageSelected.value = true;
-        imageFile.value=file;
-        image.value = URL.createObjectURL(file);
-    }
+    cropperEl = ref<typeof Cropper>();
+const signUpForm = inject<SignUpDetails>('signUpForm')!;
+async function onFileChange(/**e: Event*/) {
+    const img = await Camera.getPhoto({
+        quality: 90,
+        source: CameraSource.Photos,
+        allowEditing: true,
+        resultType: CameraResultType.Uri
+    }).catch(() => null);
+    if (!img) { return; }
+    image.value = img.webPath || null;
+    isImageSelected.value = true;
 }
+
 function removeImage() {
     isImageSelected.value = false;
-    imageFile.value = undefined;
+    URL.revokeObjectURL(image.value as string);
     image.value = null;
+}
+
+function uploadImage() {
+    let el = cropperEl.value;
+    if (!el) return;
+    const { canvas } = el.getResult() as CropperResult
+    canvas?.toBlob(async (v) => {
+        if (!v) { return; }
+        signUpForm.profilePicture = v;
+        const fileResult = await Filesystem.writeFile({
+            data: signUpForm.profilePicture,
+            path: USERPROFILE,
+            directory: Directory.Data,
+            recursive: true,
+        });
+        if (Capacitor.isNativePlatform()) {
+            const uri = Capacitor.convertFileSrc(fileResult.uri);
+            await Preferences.set({
+                key: 'profile_picture',
+                value: uri
+            });
+            profilePictureUri.value = uri;
+        }
+    }, 'image/png', 1);
 }
 
 const items = ref([
@@ -38,7 +62,7 @@ const items = ref([
         icon: 'pi pi-pencil',
         command: () => {
             if (!image.value && !isImageSelected.value) {
-                filePicker.value?.click();
+                onFileChange();
             }
         }
     },
@@ -46,8 +70,8 @@ const items = ref([
         label: 'Update',
         icon: 'pi pi-refresh',
         command: () => {
-            if (!imageFile.value) return;
-            filePicker.value?.click();
+            if (!isImageSelected.value) { return; }
+            onFileChange();
         }
     },
     {
@@ -60,35 +84,39 @@ const items = ref([
 
 <template>
     <div class="form w-full flex justify-center bg-white py-3 px-3 rounded-xl">
-        <div class="w-[300px] flex flex-col justify-between">
+        <div class="w-[300px] flex flex-col items-center justify-between">
             <div class="header text-center mb-5">
                 <h1 class="text-3xl font-bold">Profile Picture</h1>
                 <span class="text-sm text-gray-500 text-balance">Set a valid profile picture to let others know who you
                     are</span>
             </div>
-
+            <img :src="profilePictureUri"
+                class="rounded-full flex items-center justify-center text-xs mb-2 border border-black" height="70"
+                width="70" alt="Profile Pic">
             <div class="flex justify-center relative">
-                <div class="w-60 h-60 rounded-full overflow-hidden">
+                <div class="w-[275px] h-[275px] rounded-full overflow-hidden">
                     <SpeedDial :model="items" type="linear" direction="left"
-                        :tooltipOptions="{ position: 'top', event: 'hover' }" showIcon="pi pi-image" :transition-delay="50"
+                        :tooltipOptions="{ position: 'top', event: 'hover' }" showIcon="pi pi-camera" :transition-delay="40"
                         :rotateAnimation="false" />
-                    <input ref="filePicker" accept="image/png, image/jpeg, image/jpg" type="file" hidden
-                        @change="onFileChange">
                     <div class="bg-gray-400 flex items-center justify-center w-full h-full" v-if="!isImageSelected">
                         <UnKnownPerson fill="white" width="150" height="150" />
                     </div>
-                    <Cropper v-else :src="image" :stencil-props="{
-                        handlers: {},
-                        movable: false,
+                    <Cropper ref="cropperEl" v-else :src="image" :stencilProps="{
                         resizable: false,
-                    }" :stencil-size="{
-    width: 500,
-    height: 500,
-}" image-restriction="stencil" />
+                        aspectRatio: 1,
+                        // movable: false,
+                    }" :stencilSize="{
+    width: 225,
+    height: 225,
+}" imageRestriction="stencil" :resizeImage="{
+    adjustStencil: false
+}" />
                 </div>
             </div>
             <div class="mt-10 w-full flex justify-center">
-                <a @click.prevent="" href="#" class="underline cursor-pointer text-blue-700 mr-2.5 mb-2.5">Next</a>
+                <a v-if="isImageSelected" @click.prevent="uploadImage" href="#"
+                    class="underline cursor-pointer text-blue-700 mr-2.5 mb-2.5">Next</a>
+                <a v-else @click.prevent="" href="#" class="underline cursor-pointer text-blue-700 mr-2.5 mb-2.5">Skip</a>
             </div>
         </div>
     </div>
@@ -98,13 +126,14 @@ const items = ref([
 :deep(.p-speeddial) {
     position: absolute;
     z-index: 1;
-    right: 0;
+    right: -25px;
 }
 
 :deep(.p-speeddial-button) {
-    background-color: rgb(247, 244, 244);
-    margin: 80px 5px 0 auto;
+    background-color: rgb(252, 251, 251);
+    margin-top: 100px;
     padding: 15px;
+    border: 2px solid rgb(194, 194, 194);
 }
 
 :deep(.p-speeddial-button .pi) {
@@ -112,14 +141,14 @@ const items = ref([
 }
 
 :deep(.p-speeddial-button):hover {
-    background-color: rgb(241, 233, 233);
+    background-color: rgb(243, 237, 237);
 }
 
 :deep(.p-speeddial-action) {
-    background-color: rgb(241, 233, 233);
+    background-color: rgb(247, 242, 242);
 }
 
 :deep(.p-speeddial-list) {
     gap: 6px;
-    margin: 80px 7px 0 0;
+    margin: 100px 7px 0 0;
 }</style>

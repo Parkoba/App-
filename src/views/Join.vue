@@ -6,7 +6,6 @@ import FormLoading from '@/components/FormLoading.vue';
 import SignUpForm from '@/components/SignUpForm.vue';
 import { IonPage, onIonViewDidLeave } from '@ionic/vue';
 import { useRouter } from 'vue-router';
-import { timeout } from '@/router';
 import { useLazyComponent } from '@/utils';
 
 
@@ -17,42 +16,10 @@ import { useLazyComponent } from '@/utils';
 // TODO: Observe this Event Listener
 // App.addListener('backButton', closeAppOnBack);
 
-// onIonViewDidLeave(() => {
-//     clearTimeout(timeout);
-//     App.removeAllListeners();
-// })
-
-// function closeAppOnBack() {
-//     i++;
-//     timeout = setTimeout(() => {
-//         if (i >= 2) {
-//             if (timeout) clearTimeout(timeout);
-//             i = 0;
-//             return App.exitApp();
-//         }
-//     }, 500)
-// }
-// const isLoaded = ref<boolean>(false);
-// const LoginForm = defineAsyncComponent({
-//     loader: () => {
-//         return new Promise<Component>((resolve, reject) => {
-//             setTimeout(async () => {
-//                 try {
-//                     const { default: component } = await import('@/components/LoginForm.vue');
-//                     isLoaded.value = true;
-//                     resolve(component);
-//                 } catch (error) {
-//                     reject(error);
-//                 }
-//             }, 1000);
-//         });
-//     },
-//     loadingComponent: FormLoading,
-//     timeout: 100000,
-// });
-const { comp: LoginForm } = useLazyComponent(() => import('@/components/LoginForm.vue'));
-const isSignUp = ref<boolean>(true);
+const { comp: LoginForm } = useLazyComponent(() => import('@/components/LoginForm.vue')), 
+                            isSignUp = ref<boolean>(true);
 provide('isSignUp', isSignUp);
+
 </script>
         
 <template>
@@ -93,9 +60,6 @@ provide('isSignUp', isSignUp);
 
 :deep(.man-signup) {
     margin-bottom: 20px;
-}
-:deep(svg) {
-    cursor: pointer;
 }
 :deep(.p-error) {
     color: #dd1212

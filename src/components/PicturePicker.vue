@@ -9,6 +9,7 @@ import { Preferences } from '@capacitor/preferences';
 import { SignUpDetails } from "@/types";
 import { USERPROFILE, profilePictureUri } from "@/constants";
 import { Capacitor } from "@capacitor/core";
+import { getBase64 } from "@/utils";
 
 const isImageSelected = ref(false),
     image = ref<string | null>(null),
@@ -38,21 +39,24 @@ function uploadImage() {
     const { canvas } = el.getResult() as CropperResult
     canvas?.toBlob(async (v) => {
         if (!v) { return; }
+        const isNative = Capacitor.isNativePlatform();
         signUpForm.profilePicture = v;
+        const base64 = await getBase64(v);
         const fileResult = await Filesystem.writeFile({
-            data: signUpForm.profilePicture,
+            data: isNative ? base64 : signUpForm.profilePicture,
             path: USERPROFILE,
             directory: Directory.Data,
             recursive: true,
-        });
-        if (Capacitor.isNativePlatform()) {
-            const uri = Capacitor.convertFileSrc(fileResult.uri);
+        }).catch(() => null);
+        if (!fileResult)return;
+        const uri = Capacitor.convertFileSrc(fileResult.uri);
+        if (isNative) {
             await Preferences.set({
                 key: 'profile_picture',
                 value: uri
             });
-            profilePictureUri.value = uri;
         }
+        profilePictureUri.value = isNative? uri: URL.createObjectURL(v);
     }, 'image/png', 1);
 }
 

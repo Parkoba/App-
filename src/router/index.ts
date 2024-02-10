@@ -79,22 +79,43 @@ useBackButton(-1, () => {
           App.exitApp();
       }
 });
-let profilePicBlobUrl='';
 getProfilePicture().catch();
 
+let profilePicBlobUrl='';
+
 async function getProfilePicture(){
-  if(Capacitor.isNativePlatform()) {
-    const { value } = await Preferences.get({ key: 'profile_picture' });
-    value && (profilePictureUri.value=value);
+  // let imageBlob=null;
+  if(Capacitor.isNativePlatform()){
+    const result=await Filesystem.getUri({
+      directory: Directory.Data,
+      path: USERPROFILE
+    }).catch(()=>({uri: ''}));
+    profilePictureUri.value = Capacitor.convertFileSrc(result.uri);
+    return;
   }
-  else{
-   const result = await Filesystem.readFile({
-     path: USERPROFILE,
-     directory: Directory.Data
-   }).catch(()=>({data: ''}));
-   profilePicBlobUrl = createBlobUrl(result.data) || '';
-   profilePictureUri.value = profilePicBlobUrl;
-  }
+  const result=await Filesystem.readFile({
+    directory: Directory.Data,
+    path: USERPROFILE,
+  }).catch(()=>({data: ''}));
+  profilePicBlobUrl=createBlobUrl(result.data)||'';
+  profilePictureUri.value = profilePicBlobUrl;
+  // if(Capacitor.isNativePlatform()) {
+  //   const result = await Filesystem.readFile({
+  //     path: USERPROFILE,
+  //     directory: Directory.Data
+  //   }).catch(()=>({data: ''}));
+  //   const { value } = await Preferences.get({ key: 'profile_picture' });
+  //   value && (profilePictureUri.value=value);
+  // }
+  // else{
+  //   const result = await Filesystem.readFile({
+  //    path: USERPROFILE,
+  //    directory: Directory.Data
+  //  }).catch(()=>({data: ''}));
+  //  const imageBlob = Capacitor.isNativePlatform() ? dataURItoBlob(result.data) : (result.data || new Blob(['']));
+  //  profilePicBlobUrl = createBlobUrl(imageBlob) || '';
+  //  profilePictureUri.value = profilePicBlobUrl;
+  // }
 }
 
 function createBlobUrl(blob: Blob|any){
@@ -103,10 +124,26 @@ function createBlobUrl(blob: Blob|any){
     }
 }
 
-router.afterEach(async (to, from) => {
+function dataURItoBlob(dataURI: unknown) {
+  if(typeof dataURI !== 'string') return;
+  let uri = dataURI.replace(/^data:/, '');
+  
+  const type = uri.match(/image\/[^;]+/)?.[0];
+  const base64 = uri.replace(/^[^,]+,/, '');
+  const arrayBuffer = new ArrayBuffer(base64.length);
+  const typedArray = new Uint8Array(arrayBuffer);
+
+  for (let i = 0; i < base64.length; i++) {
+      typedArray[i] = base64.charCodeAt(i);
+  }
+
+  return new Blob([typedArray], { type });
+}
+router.afterEach(async () => {
   await getProfilePicture();
 })
 router.beforeEach(()=>{
   URL.revokeObjectURL(profilePicBlobUrl);
 })
+
 export default router;

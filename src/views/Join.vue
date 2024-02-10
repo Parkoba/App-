@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { defineAsyncComponent, provide, ref } from 'vue';
+import { computed, defineAsyncComponent, provide, ref } from 'vue';
 import type { Component } from 'vue';
 import { App } from '@capacitor/app';
-import FormLoading from '@/components/FormLoading.vue';
-import SignUpForm from '@/components/SignUpForm.vue';
+// import SignUpForm from '@/components/SignUpForm.vue';
+// import LoginForm from '@/components/LoginForm.vue';
 import { IonPage, onIonViewDidLeave } from '@ionic/vue';
 import { useRouter } from 'vue-router';
-import { useLazyComponent } from '@/utils';
+import { preloadAsyncComponent, useLazyComponent } from '@/utils';
 
-
+const router = useRouter();
+const loginQuery = !(router.currentRoute.value.query.login==="true")
 // let i = 0;
 // let timeout: number;
 
@@ -16,10 +17,12 @@ import { useLazyComponent } from '@/utils';
 // TODO: Observe this Event Listener
 // App.addListener('backButton', closeAppOnBack);
 
-const { comp: LoginForm } = useLazyComponent(() => import('@/components/LoginForm.vue')), 
-                            isSignUp = ref<boolean>(true);
+const { comp: LoginForm } = useLazyComponent(() => import('@/components/LoginForm.vue'), null), 
+      { comp: SignUpForm } = useLazyComponent(() => import('@/components/SignUpForm.vue'), null);
+const isSignUp = ref<boolean>(loginQuery && true)
 provide('isSignUp', isSignUp);
 
+// const isFormLoading = computed(() => isSignUp.value? !isSignUpLoaded.value: !isLoaded.value);
 </script>
         
 <template>
@@ -37,7 +40,7 @@ provide('isSignUp', isSignUp);
 :deep(.form) {
     max-width: 400px;
     min-width: 320px;
-    min-height: 400px;
+    min-height: 275px;
     box-shadow: 2px 5px 10px 0px var(--parkoba-shadow-color);
 }
 
@@ -55,7 +58,8 @@ provide('isSignUp', isSignUp);
 }
 
 :deep(.signup-input) {
-    margin-bottom: 5px;
+    margin-bottom: 7px;
+    border-top: 0px;
 }
 
 :deep(.man-signup) {

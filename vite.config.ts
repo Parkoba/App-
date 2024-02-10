@@ -71,9 +71,11 @@ export default defineConfig({
   server: {
     port: 5000,
     strictPort: true,
+    hmr: {
+      overlay: true,
+    }
   },
   build:{
-    minify: 'terser',
-    cssMinify: 'lightningcss'
+    cssMinify: 'lightningcss',
   }
 })

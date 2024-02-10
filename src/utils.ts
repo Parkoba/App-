@@ -1,5 +1,12 @@
-import { ref, Component, defineAsyncComponent, AsyncComponentLoader, Ref } from 'vue';
-import FormLoading from '@/components/FormLoading.vue';
+import {
+  ref,
+  Component,
+  defineAsyncComponent,
+  Ref,
+  AsyncComponentOptions,
+DefineComponent
+} from "vue";
+import FormLoading from "@/components/FormLoading.vue";
 
 export function bounce(x: number): number {
   const n1 = 7.5625;
@@ -16,38 +23,54 @@ export function bounce(x: number): number {
   }
 }
 
-
 /**
  * Returns a lazy-loaded component and a boolean indicating if the component has been loaded.
  * @param fn - The function that loads the component.
  * @returns An object with the boolean isLoaded and the lazy-loaded component.
  */
-export function useLazyComponent<T extends () => Promise<{ default: Component }>>(
-  fn: T
-) {
-  const isLoaded: Ref<boolean> = ref(false);
+export function useLazyComponent<
+  T extends () => Promise<{ default: Component }>
+>(fn: T, loaderComp: Component | null, errorComp?: Component, delay?: number) {
+  // const isLoaded: Ref<boolean> = ref(false);
+  const loadingComponent =
+    loaderComp === null ? undefined : !loaderComp ? FormLoading : loaderComp;
   const comp = defineAsyncComponent({
     loader: () => {
-      return new Promise<Awaited<ReturnType<T>>['default']>((resolve, reject) => {
-        setTimeout(async () => {
-          try {
-            const { default: component } = await fn();
-            isLoaded.value = true;
-            resolve(component);
-          } catch (error) {
-            reject(error);
-          }
-        }, 1000);
-      });
+      return new Promise<Awaited<ReturnType<T>>["default"]>(
+        (resolve, reject) => {
+          setTimeout(async () => {
+            try {
+              const { default: component } = await fn();
+              // isLoaded.value = true;
+              resolve(component);
+            } catch (error) {
+              reject(error);
+            }
+          }, delay || 0);
+        }
+      );
     },
-    loadingComponent: FormLoading,
+    loadingComponent,
+    errorComponent: errorComp,
     timeout: 10000,
   });
-  return { isLoaded, comp };
+  preloadAsyncComponent(comp);
+  return { comp, /*isLoaded*/ };
 }
 
-export async function getBlobFromUrl(url: string){
-  const response = await fetch(url);
-  const blob = await response.blob();
-  return blob
+export function getBase64(blob: Blob | File) {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onloadend = () => {
+      resolve(reader.result as string);
+    }
+  })
 }
+
+export const preloadAsyncComponent = (fn: DefineComponent | Component) => {
+  const a=()=>{(fn as DefineComponent).__asyncLoader()}
+    document.readyState==="complete"?a():document.addEventListener('readystatechange', (e)=>{
+        if(document.readyState==="complete") setTimeout(a, 4000)
+    });
+};

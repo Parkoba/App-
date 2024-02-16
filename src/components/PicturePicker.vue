@@ -6,14 +6,15 @@ import UnKnownPerson from "@/components/IonPerson.svg";
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Preferences } from '@capacitor/preferences';
-import { SignUpDetails } from "@/types";
-import { USERPROFILE, profilePictureUri } from "@/constants";
+import { MenuItem, SignUpDetails } from "@/types";
+import { USERPROFILE, isNative, profilePictureUri } from "@/constants";
 import { Capacitor } from "@capacitor/core";
 import { getBase64 } from "@/utils";
+import PictureGetter from "./PictureGetter.vue";
 
 const isImageSelected = ref(false),
     image = ref<string | null>(null),
-    cropperEl = ref<typeof Cropper>();
+    profilePicEl = ref<InstanceType<typeof PictureGetter>>();
 const signUpForm = inject<SignUpDetails>('signUpForm')!;
 async function onFileChange(/**e: Event*/) {
     const img = await Camera.getPhoto({
@@ -33,22 +34,19 @@ function removeImage() {
     image.value = null;
 }
 
-function uploadImage() {
-    let el = cropperEl.value;
+async function uploadImage() {
+    let el = profilePicEl.value;
     if (!el) return;
-    const { canvas } = el.getResult() as CropperResult
-    canvas?.toBlob(async (v) => {
-        if (!v) { return; }
-        const isNative = Capacitor.isNativePlatform();
-        signUpForm.profilePicture = v;
-        const base64 = await getBase64(v);
+    const picture = await el.extract(isNative);
+    if (!picture) { return; }
+        // signUpForm.profilePicture = picture;
         const fileResult = await Filesystem.writeFile({
-            data: isNative ? base64 : signUpForm.profilePicture,
+            data: picture,
             path: USERPROFILE,
             directory: Directory.Data,
             recursive: true,
         }).catch(() => null);
-        if (!fileResult)return;
+        if (!fileResult) return;
         const uri = Capacitor.convertFileSrc(fileResult.uri);
         if (isNative) {
             await Preferences.set({
@@ -56,11 +54,10 @@ function uploadImage() {
                 value: uri
             });
         }
-        profilePictureUri.value = isNative? uri: URL.createObjectURL(v);
-    }, 'image/png', 1);
+        profilePictureUri.value = isNative? uri: URL.createObjectURL(picture as Blob);
 }
 
-const items = ref([
+const items = ref<MenuItem[]>([
     {
         label: 'Add',
         icon: 'pi pi-pencil',
@@ -99,22 +96,7 @@ const items = ref([
                 width="70" alt="Profile Pic">
             <div class="flex justify-center relative">
                 <div class="w-[275px] h-[275px] rounded-full overflow-hidden">
-                    <SpeedDial :model="items" type="linear" direction="left"
-                        :tooltipOptions="{ position: 'top', event: 'hover' }" showIcon="pi pi-camera" :transition-delay="40"
-                        :rotateAnimation="false" />
-                    <div class="bg-gray-400 flex items-center justify-center w-full h-full" v-if="!isImageSelected">
-                        <UnKnownPerson fill="white" width="150" height="150" />
-                    </div>
-                    <Cropper ref="cropperEl" v-else :src="image" :stencilProps="{
-                        resizable: false,
-                        aspectRatio: 1,
-                        // movable: false,
-                    }" :stencilSize="{
-    width: 225,
-    height: 225,
-}" imageRestriction="stencil" :resizeImage="{
-    adjustStencil: false
-}" />
+                    <PictureGetter :dialItems="items" :image="image" :imageSelected="isImageSelected" ref="profilePicEl" />
                 </div>
             </div>
             <div class="mt-10 w-full flex justify-center">

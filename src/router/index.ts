@@ -8,21 +8,29 @@ import { Capacitor } from '@capacitor/core';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 
 const routes: Array<RouteRecordRaw> = [
-  {
-    path: '/',
-    redirect: '/get-started'
-  },
-  {
-    path: '/get-started',
-    component: () => import('@/views/IntroPage.vue')
-  },
   // {
-  //    path: '/login',
-  //    component: () => import('@/views/Login.vue')
+  //   path: '/',
+  //   redirect: '/intro'
   // },
   {
-    path: '/join',
-    component: () => import('@/views/Join.vue'),
+     path: '/home',
+     alias: '/',
+     component: () => import('@/views/Home.vue'),
+  } as any,
+  {
+    name: 'intro',
+    path: '/intro',
+    component: () => import('@/views/Intro.vue')
+  },
+  {
+    name: 'login',
+    path: '/login',
+    component: () => import('@/views/Login.vue'),
+  },
+  {
+    name: 'register',
+    path: '/register',
+    component: () => import('@/views/SignUp.vue'),
   },
   // {
   //   path: '/tabs/',

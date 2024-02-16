@@ -1,10 +1,12 @@
 <template>
   <ion-app>
+    <Toast position="top-center" />
     <ion-router-outlet />
   </ion-app>
 </template>
 
 <script setup lang="ts">
+import Toast from 'primevue/toast';
 import { IonApp, IonRouterOutlet } from '@ionic/vue';
 </script>
 

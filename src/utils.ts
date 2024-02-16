@@ -2,11 +2,21 @@ import {
   ref,
   Component,
   defineAsyncComponent,
-  Ref,
-  AsyncComponentOptions,
-DefineComponent
+  DefineComponent,
+  onMounted,
+  unref,
 } from "vue";
+import { injectHead, useHead } from "@unhead/vue";
 import FormLoading from "@/components/FormLoading.vue";
+import {
+  TransitionOptions,
+  createAnimation,
+  getIonPageElement,
+  onIonViewDidEnter,
+  Animation,
+  onIonViewWillEnter,
+  onIonViewWillLeave,
+} from "@ionic/vue";
 
 export function bounce(x: number): number {
   const n1 = 7.5625;
@@ -55,22 +65,186 @@ export function useLazyComponent<
     timeout: 10000,
   });
   preloadAsyncComponent(comp);
-  return { comp, /*isLoaded*/ };
+  return { comp /*isLoaded*/ };
 }
 
 export function getBase64(blob: Blob | File) {
-  return new Promise<string>((resolve, reject) => {
+  return new Promise<string>((resolve) => {
     const reader = new FileReader();
     reader.readAsDataURL(blob);
     reader.onloadend = () => {
       resolve(reader.result as string);
-    }
-  })
+    };
+  });
 }
 
 export const preloadAsyncComponent = (fn: DefineComponent | Component) => {
-  const a=()=>{(fn as DefineComponent).__asyncLoader()}
-    document.readyState==="complete"?a():document.addEventListener('readystatechange', (e)=>{
-        if(document.readyState==="complete") setTimeout(a, 4000)
+  const a = () => {
+    (fn as DefineComponent).__asyncLoader();
+  };
+  document.readyState === "complete"
+    ? a()
+    : document.addEventListener("readystatechange", (e) => {
+        if (document.readyState === "complete") setTimeout(a, 4000);
+      });
+};
+
+export function useIonHead(obj: Parameters<typeof useHead>[0]) {
+  // const head = useHead(obj);
+  // const router = useRouter();
+  // const {fullPath} = useRoute();
+  // router.beforeResolve(() => {
+  //   if(head){
+  //      head.dispose();
+  //   }
+  // })
+  // router.afterEach((to) => {
+  //    if(to.fullPath === fullPath){
+  //    }
+  // })
+  let headInject = injectHead();
+  let headObj: ReturnType<typeof useHead>;
+  onMounted(() => {
+    if (!headObj) {
+      headObj = headInject.push(obj);
+    }
+  });
+
+  if (!import.meta.env.SSR) {
+    onIonViewWillEnter(async () => {
+      if (!headObj) return;
+      headObj = headInject.push(obj);
+      console.log(obj.title);
     });
+
+    onIonViewWillLeave(() => {
+      if (!headObj) return;
+      headObj.dispose();
+    });
+  }
+}
+
+export const formAnimation1 = (
+  _: HTMLElement,
+  opts: TransitionOptions
+): Animation => {
+  const OFF_BOTTOM = window.innerHeight / 2 + "px";
+  const CENTER = "0px";
+
+  const backDirection = opts.direction === "back";
+  const enteringEl = opts.enteringEl;
+  const leavingEl = opts.leavingEl;
+  const rootTransition = createAnimation();
+
+  if (!backDirection) {
+    const ionPageElement = getIonPageElement(enteringEl);
+
+    rootTransition
+      .addElement(ionPageElement)
+      .fill("both")
+      .beforeRemoveClass("ion-page-invisible");
+    // animate the component itself
+    // if (backDirection) {
+    //   rootTransition.duration((opts.duration ?? 0) || 500).easing('ease-in-out');
+    // } else {
+    rootTransition
+      .duration((opts.duration ?? 0) || 300)
+      .easing("ease-in-out")
+      .fromTo("transform", `translateY(${OFF_BOTTOM})`, `translateY(${CENTER})`)
+      .fromTo("opacity", 0, 1);
+  }
+  // }
+
+  // setup leaving view
+  else {
+    // leaving content
+    // rootTransition.duration((opts.duration ?? 0) || 500).easing('ease-in-out');
+
+    rootTransition
+      .easing("ease-in-out")
+      .addElement(getIonPageElement(leavingEl!))
+      .onFinish((currentStep) => {
+        // if (currentStep === 1 && leavingPage.elements.length > 0) {
+        //   leavingPage.elements[0].style.setProperty('display', 'none');
+        // }
+      })
+      .fromTo("transform", `translateY(${CENTER})`, `translateY(${OFF_BOTTOM})`)
+      .fromTo("opacity", 1, 0);
+
+    // leavingPage.addAnimation(leavingPage);
+  }
+
+  return rootTransition;
+};
+
+export const formAnimation = (
+  _: HTMLElement,
+  opts: TransitionOptions
+): Animation => {
+  const OFF_BOTTOM = window.innerHeight / 2 + "px";
+  const CENTER = "0px";
+
+  const backDirection = opts.direction === "back";
+  const enteringEl = opts.enteringEl;
+  const leavingEl = opts.leavingEl;
+
+  const ionPageElement = getIonPageElement(enteringEl) as HTMLElement;
+  // const enteringToolbarEle = ionPageElement.querySelector('ion-toolbar');
+  const rootTransition = createAnimation();
+
+  rootTransition.addElement(ionPageElement).fill("both");
+  // .beforeRemoveClass('ion-page-invisible');
+  ionPageElement.style.setProperty("z-index", "2");
+  rootTransition
+    .duration((opts.duration ?? 0) || 500)
+    .easing("ease-in-out")
+    .fromTo("opacity", 0, 1)
+    .fromTo("transform", `translateY(${OFF_BOTTOM})`, `translateY(${CENTER})`)
+    .onFinish(() => {
+      ionPageElement.style.removeProperty("z-index");
+    });
+
+  // animate the component itself
+  // if (!backDirection) {
+  //   rootTransition
+  //     .duration((opts.duration ?? 0) || 500)
+  //     .easing('ease-in-out')
+  //     .fromTo('opacity', 0, 1)
+  //     .fromTo('transform', `translateY(${OFF_BOTTOM})`, `translateY(${CENTER})`);
+  // }
+  // else{
+  //   rootTransition
+  //     .duration((opts.duration ?? 0) || 500)
+  //     .easing('ease-in-out')
+  //     .fromTo('opacity', 1, 0)
+  //     .fromTo('transform', `translateY(${CENTER})`, `translateY(${OFF_BOTTOM})`);
+  // }
+
+  // Animate toolbar if it's there
+  // if (enteringToolbarEle) {
+  //   const enteringToolBar = createAnimation();
+  //   enteringToolBar.addElement(enteringToolbarEle);
+  //   rootTransition.addAnimation(enteringToolBar);
+  // }
+
+  // setup leaving view
+  // if (leavingEl && backDirection) {
+  //   // leaving content
+  //   rootTransition.duration((opts.duration ?? 0) || 500).easing('ease-in-out');
+
+  //   const leavingPage = createAnimation();
+  //   leavingPage
+  //     .addElement(getIonPageElement(leavingEl))
+  //     .onFinish((currentStep) => {
+  //       // if (currentStep === 1 && leavingPage.elements.length > 0) {
+  //       //   leavingPage.elements[0].style.setProperty('display', 'none');
+  //       // }
+  //     })
+  //     .fromTo('transform', `translateY(${CENTER})`, `translateY(${OFF_BOTTOM})`)
+  //     .fromTo('opacity', 1, 0);
+
+  //   rootTransition.addAnimation(leavingPage);
+  // }
+
+  return rootTransition;
 };

@@ -12,10 +12,11 @@ import SignUpInput from '@/components/SignUpInput.vue';
 import LoadableButton from '@/components/LoadableButton.vue';
 import Google from '@/components/Google.svg';
 import Facebook from '@/components/Facebook.svg';
-import { preloadAsyncComponent } from '@/utils';
+import { useIonRouter } from '@ionic/vue';
+import { formAnimation } from '@/utils';
 
 const toast = useToast();
-const isSignUp = inject<Ref<boolean>>('isSignUp');
+const router = useIonRouter();
 const schema = yup.object({
     email: yup.string().matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 'Email Address is invalid').required('Email Address is required'),
     password: yup.string().required('Password is required')
@@ -34,6 +35,9 @@ const [password, passwordAttrs] = defineField('password');
 const onSubmit = handleSubmit((values) => {
     toast.add({ severity: 'success', summary: 'Form Submitted', detail: JSON.stringify(values), life: 3000 });
 });
+function goToSignUp(){
+    router.push('/register', formAnimation);
+}
 
 const isLoading = ref(false),
     isPasswordVisible = ref(false);
@@ -42,7 +46,6 @@ const isLoading = ref(false),
 
 <template>
     <div class="flex flex-col gap-6 items-center justify-center w-full h-full px-10">
-        <Toast />
         <form class="form bg-white gap-3 p-5 w-full rounded-lg" @submit.prevent=""
             action="/" method="post">
             <h3 class="text-xl">Login</h3>
@@ -71,8 +74,7 @@ const isLoading = ref(false),
                     <!-- Login with Facebook -->
                 </Button>
             </div>
-            <div class="mt-2.5 text-center text-sm w-full">Don&apos;t have an account? <a href="#" @click.prevent="isSignUp=true"
-                    class="text-pb hover:underline">Register now</a></div>
+            <div class="mt-2.5 text-center text-sm w-full">Don&apos;t have an account? <a href="/register" @click.prevent="goToSignUp()" class="text-pb hover:underline">Register now</a></div>
         </form>
     </div>
 </template>

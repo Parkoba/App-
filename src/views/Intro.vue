@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import 'swiper/css';
 import { IonPage, useBackButton, useIonRouter } from '@ionic/vue';
-// import SlideContent from '@/components/Intro/SlideContent.vue';
 import Welcome from '@/components/Intro/Welcome.svg';
 import CarPole from '@/components/Intro/Car_Pole.vue';
 import EarthSlide from '@/components/Intro/Earth.vue';
@@ -9,36 +8,15 @@ import LastSlide from '@/components/Intro/LastSlide.vue';
 import IntroSlideControl from '@/components/Intro/SlideControl.vue';
 // import type { IntroPageSlide } from '@/types';
 import { Swiper, SwiperSlide } from 'swiper/vue';
+import { } from '@ionic/vue'
+import { useIonHead } from '@/utils';
+import { App } from '@capacitor/app';
 import { provide, ref } from 'vue';
 const activeIndex = ref(0);
 provide('activeIndex', activeIndex);
-// const slides: IntroPageSlide[] = [
-//     {
-//         heading: 'Welcome to Parkoba',
-//         alt: 'Welcome greeting'
-//     },
-//     {
-//         heading: 'Easy Parking Just For You',
-//         alt: 'Picture of a Car with a Parking Spot'
-//     },
-//     {
-//         heading: 'Find A Spot Close To You',
-//         image: '/Earth_Location.png',
-//         alt: 'Picture of the Earth showing how close you are to the parking spot.'
-//     },
-//     {
-//         heading: 'Conveniently Situated',
-//         image: '/Map.png',
-//         alt: 'Picture of a Map'
-//     },
-//     {
-//         heading: 'Affordable & Accessible',
-//         image: '/Money_Wallet.png',
-//         alt: 'Picture of a Wallet'
-//     }
-// ];
-import { } from '@ionic/vue'
-import { App } from '@capacitor/app';
+useIonHead({
+    title: 'Welcome To Parkoba',
+});
 
 </script>
     

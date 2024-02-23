@@ -15,7 +15,7 @@ const routes: Array<RouteRecordRaw> = [
   {
      path: '/home',
      alias: '/',
-     component: () => import('@/views/Home.vue'),
+     component: () => import('@/views/home/index.vue'),
   } as any,
   {
     name: 'intro',

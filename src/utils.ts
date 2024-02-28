@@ -21,6 +21,7 @@ import {
   onIonViewWillEnter,
   onIonViewWillLeave,
 } from "@ionic/vue";
+import { Preferences } from "@capacitor/preferences";
 
 export function bounce(x: number): number {
   const n1 = 7.5625;
@@ -310,3 +311,14 @@ export const formAnimation = (
 
   return rootTransition;
 };
+
+export function checkUserValid(){
+ return Promise.all([
+    Preferences.get({
+      key: "hasDoneIntro",
+    }),
+    Preferences.get({
+      key: "isUserValid",
+    }),
+  ])
+}

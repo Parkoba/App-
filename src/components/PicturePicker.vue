@@ -54,7 +54,7 @@ async function uploadImage() {
                 value: uri
             });
         }
-        profilePictureUri.value = isNative? uri: URL.createObjectURL(picture as Blob);
+        // profilePictureUri.value = isNative? uri: URL.createObjectURL(picture as Blob);
 }
 
 const items = ref<MenuItem[]>([
@@ -91,9 +91,6 @@ const items = ref<MenuItem[]>([
                 <span class="text-sm text-gray-500 text-balance">Set a valid profile picture to let others know who you
                     are</span>
             </div>
-            <img :src="profilePictureUri"
-                class="rounded-full flex items-center justify-center text-xs mb-2 border border-black" height="70"
-                width="70" alt="Profile Pic">
             <div class="flex justify-center relative">
                 <div class="w-[275px] h-[275px] rounded-full overflow-hidden">
                     <PictureGetter :dialItems="items" :image="image" :imageSelected="isImageSelected" ref="profilePicEl" />

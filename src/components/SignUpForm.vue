@@ -174,7 +174,7 @@ onIonViewWillLeave(() => clearInterval(otpTimer));
                             :iconClick="() => { isPassword2Visible = !isPassword2Visible }" :bindAttrs="password2Attrs"
                             :invalid="errors.password2" />
                         <Button type="button" @click="goToNextStep"
-                            class="man-signup mt-5 disabled:bg-gray-500 flex items-center justify-center max-h-12 w-full py-[12px] bg-pb hover:bg-slate-700 rounded-3xl text-white dark:text-white dark:hover:bg-pb dark:bg-black tracking-widest">
+                            class="man-signup mt-5 disabled:bg-gray-500 flex items-center justify-center max-h-12 w-full py-[12px] bg-pb-950 hover:bg-slate-700 rounded-3xl text-white dark:text-white dark:hover:bg-pb-950 dark:bg-black tracking-widest">
                             Next
                         </Button>
                         <AuthDivider text="OR" />
@@ -190,7 +190,7 @@ onIonViewWillLeave(() => clearInterval(otpTimer));
                                 <!-- Signup with Facebook -->
                             </Button>
                         </div>
-                        <div class="mt-2.5 text-center text-sm w-full">Already have an account? <a href="/login" @click.prevent="goToLogin" class="text-pb hover:underline">Login</a></div>
+                        <div class="mt-2.5 text-center text-sm w-full">Already have an account? <a href="/login" @click.prevent="goToLogin" class="text-pb-950 hover:underline">Login</a></div>
                     </div>
                     <div v-else class="w-full">
                         <SignUpInput :disabled="isSendClicked" v-model="signUpForm.phoneNumber" placeholder="Mobile Number"
@@ -202,9 +202,9 @@ onIonViewWillLeave(() => clearInterval(otpTimer));
                                     class="absolute right-4 top-1/2 -translate-y-1/4" stroke="#0F3877"
                                     :style="{ height: '25px', width: '25px' }" />
                                 <span href="#" class="text-sm absolute right-4 top-1/2"
-                                    :class="{ 'text-red-600': is10SecsLess, 'text-pb': !is10SecsLess }"
+                                    :class="{ 'text-red-600': is10SecsLess, 'text-pb-950': !is10SecsLess }"
                                     v-else-if="!canSendOtp">{{ otpTimeLeft }}</span>
-                                <a href="#" class="text-pb hover:underline text-sm absolute right-4 top-1/2"
+                                <a href="#" class="text-pb-950 hover:underline text-sm absolute right-4 top-1/2"
                                     @click.prevent="sendOtp" v-else-if="canSendOtp && !isOtpLoading">Send</a>
                                 <InputText v-model="otpKey" :class="{ 'invalid': isOtpInvalid }"
                                     class="w-full py-3 px-2.5 mt-2.5 border-b-2  border-solid border-gray-950 rounded-none"
@@ -213,7 +213,7 @@ onIonViewWillLeave(() => clearInterval(otpTimer));
                             <small class="p-error">{{ isOtpInvalid ? 'Invalid OTP ' : '' }} </small>
                         </div>
                         <LoadableButton :disabled="otpKey.length === 0" type="button" @click="onSubmit" :load="isLoading"
-                            class="man-signup mt-5 disabled:bg-gray-500 flex items-center justify-center max-h-12 w-full py-[12px] bg-pb hover:bg-slate-700 rounded-3xl text-white dark:text-white dark:hover:bg-pb dark:bg-black tracking-widest">
+                            class="man-signup mt-5 disabled:bg-gray-500 flex items-center justify-center max-h-12 w-full py-[12px] bg-pb-950 hover:bg-slate-700 rounded-3xl text-white dark:text-white dark:hover:bg-pb-950 dark:bg-black tracking-widest">
                             Submit
                         </LoadableButton>
                     </div>

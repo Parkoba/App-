@@ -58,7 +58,7 @@ const isLoading = ref(false),
                 :invalid="errors.password" />
             <!-- <InputText class="w-full border-2 rounded-3xl border-solid shadow-lg shadow-gray-200" type="password" name="confirm-password" placeholder="Confirm Password" /> -->
             <LoadableButton @click="(e) => { onSubmit(e) }" :load="isLoading"
-                class="man-signup flex items-center justify-center mt-5 max-h-12 w-full py-[12px] bg-pb hover:bg-slate-700 rounded-3xl text-white dark:text-white dark:hover:bg-pb dark:bg-black tracking-widest">
+                class="man-signup flex items-center justify-center mt-5 max-h-12 w-full py-[12px] bg-pb-950 hover:bg-slate-700 rounded-3xl text-white dark:text-white dark:hover:bg-pb-950 dark:bg-black tracking-widest">
                 Next
             </LoadableButton>
             <AuthDivider text="OR" />
@@ -74,7 +74,7 @@ const isLoading = ref(false),
                     <!-- Login with Facebook -->
                 </Button>
             </div>
-            <div class="mt-2.5 text-center text-sm w-full">Don&apos;t have an account? <a href="/register" @click.prevent="goToSignUp()" class="text-pb hover:underline">Register now</a></div>
+            <div class="mt-2.5 text-center text-sm w-full">Don&apos;t have an account? <a href="/register" @click.prevent="goToSignUp()" class="text-pb-950 hover:underline">Register now</a></div>
         </form>
     </div>
 </template>

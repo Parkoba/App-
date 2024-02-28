@@ -41,6 +41,7 @@ import { createHead } from "@unhead/vue";
 
 import { defineCustomElements } from "@ionic/pwa-elements/loader";
 import { Preferences } from "@capacitor/preferences";
+import { checkUserValid } from "./utils";
 defineCustomElements(window);
 
 const app = createApp(App)
@@ -54,18 +55,18 @@ const app = createApp(App)
   .directive("ripple", Ripple);
 
 router.isReady().then(async () => {
-  const [{ value: hasDoneIntro }, { value: isUserValid }] = await Promise.all([
-    Preferences.get({
-      key: "hasDoneIntro",
-    }),
-    Preferences.get({
-      key: "isUserValid",
-    }),
-  ]);
-  if (!hasDoneIntro) {
-    await router.replace("/intro");
-  } else if (hasDoneIntro && isUserValid !== "true") {
-    await router.replace("/register");
-  }
+  await handleUserValid()
   app.mount("#app");
 });
+
+async function handleUserValid(){
+  const [{ value: hasDoneIntro }, { value: isUserValid }] = await checkUserValid();
+  const { currentRoute: {value: {path}} } = router;
+  if(router.getRoutes().some((a)=>a.path === path) && !(["/intro", "/register", "/login"].includes(path))) {
+    if (!hasDoneIntro) {
+      await router.replace("/intro");
+    } else if (hasDoneIntro && isUserValid !== "true") {
+      await router.replace("/register");
+    }
+  }
+}

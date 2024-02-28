@@ -13,6 +13,10 @@ const routes: Array<RouteRecordRaw> = [
   //   redirect: '/intro'
   // },
   {
+    path: '/:pathMatch(.*)*',
+    component: () => import('@/views/404.vue')
+  },
+  {
      path: '/home',
      alias: '/',
      component: () => import('@/views/home/index.vue'),
